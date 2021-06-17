@@ -6,6 +6,7 @@ using Photon.Realtime;
 
 public class multiController : MonoBehaviourPunCallbacks
 {
+    GameDerector GD;//GameDerectorスクリプト取得用変数
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +16,8 @@ public class multiController : MonoBehaviourPunCallbacks
         PhotonNetwork.PhotonServerSettings.AppSettings.Port = 5055;
         //ネットワークへの接続
         PhotonNetwork.ConnectUsingSettings();
+
+        GD = GameObject.Find("GameDerector").GetComponent<GameDerector>();
     }
 
     // サーバーへの接続が成功した時
@@ -27,9 +30,11 @@ public class multiController : MonoBehaviourPunCallbacks
     // ルームに入ったとき時
     public override void OnJoinedRoom()
     {
-        //// ランダムな位置にネットワークオブジェクトを生成する
-        //var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0);
-        //PhotonNetwork.Instantiate("Player", v, Quaternion.identity);
+        //PhotonNetwork.IsMessageQueueRunning = false;
+
+        // ランダムな位置にネットワークオブジェクトを生成する
+        var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0);
+        PhotonNetwork.Instantiate("Apple"/*GD.playername*/, v, Quaternion.identity);
     }
 
     int status = 0;

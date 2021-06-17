@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameDerector : MonoBehaviour
 {
+    [SerializeField] GameObject fuitChoosUI,fuitchoosButton;
+    public string playername;//果実の名前をプレイヤーに送る用
     public string fruitname;//選択した果物の名前保存用
     private string[] fruitsames = { "Apple", "Mikan", "Melon", "Nasi", "Coconut" };
 
@@ -36,7 +38,15 @@ public class GameDerector : MonoBehaviour
 
     public void OnClick()
     {
-        SceneManager.LoadScene("SampleScene");
+        playername = fruitname;
+        fuitChoosUI.SetActive(false);
+        fuitchoosButton.SetActive(true);
+    }
+
+    public void fruitchooseOnClick()
+    {
+        fuitChoosUI.SetActive(true);
+        fuitchoosButton.SetActive(false);
     }
     // Start is called before the first frame update
     void Start()
