@@ -6,6 +6,9 @@ using Photon.Realtime;
 
 public class multiController : MonoBehaviourPunCallbacks
 {
+    [SerializeField]
+    GameObject ProText;
+
     GameDerector GD;//GameDerectorスクリプト取得用変数
     int Maxroom,Countrooms;//ルームの人数は最大4人まで
     public bool ServerFlg; //サーバーフラグ
@@ -44,6 +47,7 @@ public class multiController : MonoBehaviourPunCallbacks
     // ルームに入ったとき時
     public override void OnJoinedRoom()
     {
+        ProText.SetActive(true);
         if (ServerFlg==true&&Countrooms<=Maxroom)
         {
             Countrooms++;
