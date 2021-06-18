@@ -51,7 +51,8 @@ public class GameDerector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //fruitname =fruitsames[0];
+        fruitname = fruitsames[0];
+        playername = fruitname;
         //Debug.Log(fruitname);
     }
 

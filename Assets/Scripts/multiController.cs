@@ -7,17 +7,31 @@ using Photon.Realtime;
 public class multiController : MonoBehaviourPunCallbacks
 {
     GameDerector GD;//GameDerectorスクリプト取得用変数
-    // Start is called before the first frame update
-    void Start()
+    int Maxroom,Countrooms;//ルームの人数は最大4人まで
+    public bool ServerFlg; //サーバーフラグ
+    public void Login(string ip, bool sf)
     {
+        //サーバーフラグの設定
+        ServerFlg = sf;
         //IPアドレスの設定
-        PhotonNetwork.PhotonServerSettings.AppSettings.Server = "172.18.86.111";
+        PhotonNetwork.PhotonServerSettings.AppSettings.Server = ip;
         //ポート番号の設定
         PhotonNetwork.PhotonServerSettings.AppSettings.Port = 5055;
         //ネットワークへの接続
         PhotonNetwork.ConnectUsingSettings();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        ////IPアドレスの設定
+        //PhotonNetwork.PhotonServerSettings.AppSettings.Server = "172.18.86.111";
+        ////ポート番号の設定
+        //PhotonNetwork.PhotonServerSettings.AppSettings.Port = 5055;
+        ////ネットワークへの接続
+        //PhotonNetwork.ConnectUsingSettings();
 
         GD = GameObject.Find("GameDerector").GetComponent<GameDerector>();
+        Maxroom = 4;
     }
 
     // サーバーへの接続が成功した時
@@ -30,11 +44,37 @@ public class multiController : MonoBehaviourPunCallbacks
     // ルームに入ったとき時
     public override void OnJoinedRoom()
     {
-        //PhotonNetwork.IsMessageQueueRunning = false;
+        if (ServerFlg==true&&Countrooms<=Maxroom)
+        {
+            Countrooms++;
+            Debug.Log(Countrooms);
+        }else if (ServerFlg == false && Countrooms <= Maxroom)
+        {
+            Countrooms++;
+            Debug.Log(Countrooms);
+        }
+        else
+        {
+            Debug.Log("満員");
+        }
 
-        // ランダムな位置にネットワークオブジェクトを生成する
-        var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0);
-        PhotonNetwork.Instantiate("Apple"/*GD.playername*/, v, Quaternion.identity);
+
+
+        {
+            // //ランダムな位置にネットワークオブジェクトを生成する
+            //var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0);
+            // GameObject go = PhotonNetwork.Instantiate("Apple"/*GD.playername*/, v, Quaternion.identity);
+            // //サーバーなら赤、クライアントなら青にする
+            // if (ServerFlg)
+            // {
+            //     //go.GetComponent<Renderer>().material.color = Color.red;
+            //     go.GetComponent<PlayerController>().Ptext = "Player1";
+            // }
+            // else
+            // {
+            //     go.GetComponent<PlayerController>().Ptext = "Player2";
+            // }
+        }
     }
 
     int status = 0;
