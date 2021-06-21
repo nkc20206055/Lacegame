@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class GaolandUIController : MonoBehaviour
+public class GaolandUIController : /*MonoBehaviour*/MonoBehaviourPunCallbacks
 {
     public int GoalCount,GateCount;
     // Start is called before the first frame update
@@ -18,16 +19,19 @@ public class GaolandUIController : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag=="Goal"&& GateCount>=6)
+        if (photonView.IsMine)
         {
-            Debug.Log("ゴール");
-            GoalCount++;
-            GateCount = 0;
-        }
-        if (other.gameObject.tag == "Gate")
-        {
-            Debug.Log("gatepoint");
-            GateCount++;
+            if (other.gameObject.tag == "Goal" && GateCount >= 6)
+            {
+                Debug.Log("ゴール");
+                GoalCount++;
+                GateCount = 0;
+            }
+            if (other.gameObject.tag == "Gate")
+            {
+                Debug.Log("gatepoint");
+                GateCount++;
+            }
         }
     }
 }

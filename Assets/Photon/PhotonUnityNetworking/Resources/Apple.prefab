@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 255266812}
   - component: {fileID: 304012182200495226}
   - component: {fileID: 2051048798}
+  - component: {fileID: 2051048791}
   m_Layer: 0
   m_Name: Apple
   m_TagString: Untagged
@@ -225,8 +226,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eccd9d97e49c4a640ae7af750029a7eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  Speed: 15
   Ptext: 
+  speed: 0
 --- !u!114 &304012182200495226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,3 +260,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &2051048791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4426157229469877070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9910c9296b33c4c4f99ac09561624cb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GoalCount: 0
+  GateCount: 0

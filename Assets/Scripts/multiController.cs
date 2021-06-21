@@ -47,37 +47,40 @@ public class multiController : MonoBehaviourPunCallbacks
     // ルームに入ったとき時
     public override void OnJoinedRoom()
     {
-        ProText.SetActive(true);
-        if (ServerFlg==true&&Countrooms<=Maxroom)
-        {
-            Countrooms++;
-            Debug.Log(Countrooms);
-        }else if (ServerFlg == false && Countrooms <= Maxroom)
-        {
-            Countrooms++;
-            Debug.Log(Countrooms);
-        }
-        else
-        {
-            Debug.Log("満員");
-        }
+        //ProText.SetActive(true);
+        //if (ServerFlg==true&&Countrooms<=Maxroom)
+        //{
+        //    Countrooms++;
+        //    Debug.Log(Countrooms);
+        //}else if (ServerFlg == false && Countrooms <= Maxroom)
+        //{
+        //    Countrooms++;
+        //    Debug.Log(Countrooms);
+        //}
+        //else
+        //{
+        //    Debug.Log("満員");
+        //}
 
 
 
         {
-            // //ランダムな位置にネットワークオブジェクトを生成する
-            //var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0);
-            // GameObject go = PhotonNetwork.Instantiate("Apple"/*GD.playername*/, v, Quaternion.identity);
-            // //サーバーなら赤、クライアントなら青にする
-            // if (ServerFlg)
-            // {
-            //     //go.GetComponent<Renderer>().material.color = Color.red;
-            //     go.GetComponent<PlayerController>().Ptext = "Player1";
-            // }
-            // else
-            // {
-            //     go.GetComponent<PlayerController>().Ptext = "Player2";
-            // }
+
+            PhotonNetwork.Instantiate("prototypeGround 1"/*GD.playername*/, new Vector3(-50,-21,0), Quaternion.identity);
+
+            //ランダムな位置にネットワークオブジェクトを生成する
+            var v = new Vector3(/*Random.Range(-3f, 1f)*/-5f, /*Random.Range(1, 3f)*/1, 0);
+            GameObject go = PhotonNetwork.Instantiate("Apple"/*GD.playername*/, v, Quaternion.identity);
+            //サーバーなら赤、クライアントなら青にする
+            if (ServerFlg)
+            {
+                //go.GetComponent<Renderer>().material.color = Color.red;
+                go.GetComponent<PlayerController>().Ptext = "Player1";
+            }
+            else
+            {
+                go.GetComponent<PlayerController>().Ptext = "Player2";
+            }
         }
     }
 

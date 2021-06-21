@@ -36,10 +36,14 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/
     // Start is called before the first frame update
     void Start()
     {
-        Maincamera = GameObject.Find("Main Camera");
-        Maincamera.transform.parent = transform;
-        Camerapos = new Vector3(0, 2.95f, -5.14f);
-        Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
+        if (photonView.IsMine)
+        {
+            Maincamera = GameObject.Find("Main Camera");
+            Maincamera.transform.parent = transform;
+            //Camerapos = new Vector3(0, 2.95f, -5.14f);
+            Camerapos = new Vector3(-5f, 2.5f,-5f);
+            Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
+        }
 
         rigidbody = gameObject.GetComponent<Rigidbody>();
 
@@ -103,19 +107,22 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/
 
     void FixedUpdate()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-        transform.Rotate(0, x, 0);
+        if (photonView.IsMine)
+        {
+            float x = Input.GetAxis("Horizontal");
+            float y = Input.GetAxis("Vertical");
+            transform.Rotate(0, x, 0);
 
-        //rigidbody.velocity = new Vector3(x, 0, y) * 10;
-        if (y!=0&&Speed>=speed)
-        {
-            speed = speed + 0.2f;
+            //rigidbody.velocity = new Vector3(x, 0, y) * 10;
+            if (y != 0 && Speed >= speed)
+            {
+                speed = speed + 0.2f;
+            }
+            else
+            {
+                speed = speed * 0.98f;
+            }
+            transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * speed);
         }
-        else
-        {
-            speed = speed * 0.98f;
-        }
-        transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * speed);
     }
 }
