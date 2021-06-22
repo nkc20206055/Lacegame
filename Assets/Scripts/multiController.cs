@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class multiController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     GameObject ProText;
-
     GameDerector GD;//GameDerectorスクリプト取得用変数
+    public Text tm;
+    string s;
     int Maxroom,Countrooms;//ルームの人数は最大4人まで
     public bool ServerFlg; //サーバーフラグ
     public void Login(string ip, bool sf)
@@ -40,22 +42,38 @@ public class multiController : MonoBehaviourPunCallbacks
     // サーバーへの接続が成功した時
     public override void OnConnectedToMaster()
     {
+        //PhotonNetwork.LocalPlayer();
         //ルームが無ければ作成してからルーム参加する
         PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions(), TypedLobby.Default);
     }
 
-    // ルームに入ったとき時
+    // ルームに入ったとき時(部屋の入室に成功したときに呼ばれる)
     public override void OnJoinedRoom()
     {
-        //ProText.SetActive(true);
-        //if (ServerFlg==true&&Countrooms<=Maxroom)
+        ProText.SetActive(true);
+        if (ServerFlg == true)
+        {
+            Countrooms++;
+            Debug.Log(Countrooms);
+        }
+        else if (ServerFlg == false)
+        {
+            Countrooms++;
+            Debug.Log(Countrooms);
+        }
+        //if (ServerFlg == true && Countrooms <= Maxroom)
         //{
         //    Countrooms++;
         //    Debug.Log(Countrooms);
-        //}else if (ServerFlg == false && Countrooms <= Maxroom)
+        //    s = Countrooms.ToString("000");
+        //    tm.text = s;
+        //}
+        //else if (ServerFlg == false && Countrooms <= Maxroom)
         //{
         //    Countrooms++;
         //    Debug.Log(Countrooms);
+        //    s = Countrooms.ToString("000");
+        //    tm.text = s;
         //}
         //else
         //{
@@ -66,23 +84,51 @@ public class multiController : MonoBehaviourPunCallbacks
 
         {
 
-            PhotonNetwork.Instantiate("prototypeGround 1"/*GD.playername*/, new Vector3(-50,-21,0), Quaternion.identity);
+            //PhotonNetwork.Instantiate("prototypeGround 1"/*GD.playername*/, new Vector3(-50,-21,0), Quaternion.identity);
 
-            //ランダムな位置にネットワークオブジェクトを生成する
-            var v = new Vector3(/*Random.Range(-3f, 1f)*/-5f, /*Random.Range(1, 3f)*/1, 0);
-            GameObject go = PhotonNetwork.Instantiate("Apple"/*GD.playername*/, v, Quaternion.identity);
-            //サーバーなら赤、クライアントなら青にする
-            if (ServerFlg)
-            {
-                //go.GetComponent<Renderer>().material.color = Color.red;
-                go.GetComponent<PlayerController>().Ptext = "Player1";
-            }
-            else
-            {
-                go.GetComponent<PlayerController>().Ptext = "Player2";
-            }
+            ////ランダムな位置にネットワークオブジェクトを生成する
+            //var v = new Vector3(/*Random.Range(-3f, 1f)*/-5f, /*Random.Range(1, 3f)*/1, 0);
+            //GameObject go = PhotonNetwork.Instantiate("Apple"/*GD.playername*/, v, Quaternion.identity);
+            ////サーバーなら赤、クライアントなら青にする
+            //if (ServerFlg)
+            //{
+            //    //go.GetComponent<Renderer>().material.color = Color.red;
+            //    go.GetComponent<PlayerController>().Ptext = "Player1";
+            //}
+            //else
+            //{
+            //    go.GetComponent<PlayerController>().Ptext = "Player2";
+            //}
         }
     }
+
+    //int a;
+    //string b;
+
+    //void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    if (stream.isWriting)
+    //    {
+    //        //データの送信
+    //        stream.SendNext(a);
+    //        stream.SendNext(b);
+    //    }
+    //    else
+    //    {
+    //        //データの受信
+    //        a = (int)stream.ReceiveNext();
+    //        b = (string)stream.ReceiveNext();
+    //    }
+    //}
+
+    //他の誰か（プレイヤー）が部屋に来た時に呼ばれる
+    //public override void OnPlayerEnteredRoom(Player newPlayer)
+    //{
+    //    Countrooms++;
+    //    Debug.Log(Countrooms);
+    //    s = Countrooms.ToString("000");
+    //    tm.text = s;
+    //}
 
     int status = 0;
     // Update is called once per frame
@@ -103,5 +149,9 @@ public class multiController : MonoBehaviourPunCallbacks
             status = 3;
             Debug.Log("ルームに参加中");
         }
+
+        //s = Countrooms.ToString("000");
+        //tm.text = s;
+
     }
 }
