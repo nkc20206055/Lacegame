@@ -12,7 +12,7 @@ public class multiController : MonoBehaviourPunCallbacks
     GameDerector GD;//GameDerectorスクリプト取得用変数
     public Text tm;
     string s;
-    int Maxroom,Countrooms;//ルームの人数は最大4人まで
+    public int Maxroom,Countrooms;//ルームの人数は最大4人まで
     public bool ServerFlg; //サーバーフラグ
     public void Login(string ip, bool sf)
     {
@@ -43,8 +43,16 @@ public class multiController : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         //PhotonNetwork.LocalPlayer();
+
         //ルームが無ければ作成してからルーム参加する
         PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions(), TypedLobby.Default);
+
+        //PhotonNetwork.JoinLobby();
+    }
+    // ロビーに入った時
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("OnJoinedLobby");
     }
 
     // ルームに入ったとき時(部屋の入室に成功したときに呼ばれる)
@@ -53,12 +61,18 @@ public class multiController : MonoBehaviourPunCallbacks
         ProText.SetActive(true);
         if (ServerFlg == true)
         {
-            Countrooms++;
+            //Countrooms++;
+            //RPC(遠隔手続き呼び出し)
+            //photonView.RPC("TargetHit", RpcTarget.All, Countrooms);
+
             Debug.Log(Countrooms);
         }
         else if (ServerFlg == false)
         {
-            Countrooms++;
+            //Countrooms++;
+            //RPC(遠隔手続き呼び出し)
+            //photonView.RPC("TargetHit", RpcTarget.All, Countrooms);
+
             Debug.Log(Countrooms);
         }
         //if (ServerFlg == true && Countrooms <= Maxroom)
@@ -130,6 +144,7 @@ public class multiController : MonoBehaviourPunCallbacks
     //    tm.text = s;
     //}
 
+    //
     int status = 0;
     // Update is called once per frame
     void Update()
@@ -150,8 +165,17 @@ public class multiController : MonoBehaviourPunCallbacks
             Debug.Log("ルームに参加中");
         }
 
-        //s = Countrooms.ToString("000");
-        //tm.text = s;
+        if (Countrooms>=4)
+        {
+            Countrooms = 999;
+        }
 
     }
+    //すべての端末で実行される
+    //[PunRPC]
+    //private void TargetHit(int t)
+    //{
+    //    s = t.ToString("000");
+    //    tm.text = s;
+    //}
 }
