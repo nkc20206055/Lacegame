@@ -14,6 +14,7 @@ public class multiController : MonoBehaviourPunCallbacks
     string s;
     public int Maxroom,Countrooms;//ルームの人数は最大4人まで
     public bool ServerFlg; //サーバーフラグ
+    bool MainGameSwithc;
     public void Login(string ip, bool sf)
     {
         //サーバーフラグの設定
@@ -35,6 +36,7 @@ public class multiController : MonoBehaviourPunCallbacks
         ////ネットワークへの接続
         //PhotonNetwork.ConnectUsingSettings();
 
+        MainGameSwithc = true;
         GD = GameObject.Find("GameDerector").GetComponent<GameDerector>();
         Maxroom = 4;
     }
@@ -165,10 +167,31 @@ public class multiController : MonoBehaviourPunCallbacks
             Debug.Log("ルームに参加中");
         }
 
-        if (Countrooms>=4)
+        if (Countrooms>= Maxroom && MainGameSwithc==true)
         {
             Countrooms = 999;
+            if (ServerFlg == true) {
+                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-50, -21, 0), Quaternion.identity);
+                //PhotonNetwork.JoinOrCreateRoom();
+            }
+            //ランダムな位置にネットワークオブジェクトを生成する
+            var v = new Vector3(-5f,1, 0);
+            GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+            //サーバーなら赤、クライアントなら青にする
+            if (ServerFlg)
+            {
+                go.GetComponent<PlayerController>().Ptext = "Player1";
+            }
+            else
+            {
+                go.GetComponent<PlayerController>().Ptext = "Player2";
+            }
+            MainGameSwithc = false;
         }
+        //else if (MainGameSwithc == true)
+        //{
+
+            //}
 
     }
     //すべての端末で実行される
