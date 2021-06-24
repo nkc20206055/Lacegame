@@ -11,11 +11,13 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
     multiController oD;
     public Text oText;
     string s;
-    int SaveCount;
+    public int SaveCount;
+    private bool tt;
     // Start is called before the first frame update
     void Start()
     {
         oD = GameObject.Find("MultiObject").GetComponent<multiController>();
+        tt = true;
     }
 
     public override void OnJoinedRoom()
@@ -47,10 +49,10 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         }
     }
 
-    //public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
-    //{
-    //    Debug.Log("OnRoomPropertiesUpdate");
-    //}
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        Debug.Log("OnRoomPropertiesUpdate");
+    }
     // Update is called once per frame
     void Update()
     {
@@ -58,7 +60,12 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         {
             photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms);
             SaveCount = oD.Countrooms;
+
+        }else if (tt == true && SaveCount >= 4)
+        {
+            tt = false;
         }
+        //photonView.RPC("PlayerON", RpcTarget.All,tt);
     }
     //すべての端末で実行される
     [PunRPC]
@@ -69,4 +76,9 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         oText.text = t.ToString(/*"000"*/);
         //oD.Countrooms = SaveCount;
     }
+    //[PunRPC]
+    //public void PlayerON(bool o)
+    //{
+    //    Debug.Log("動いた");
+    //}
 }

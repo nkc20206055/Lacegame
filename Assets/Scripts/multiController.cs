@@ -12,7 +12,7 @@ public class multiController : MonoBehaviourPunCallbacks
     GameDerector GD;//GameDerectorスクリプト取得用変数
     public Text tm;
     string s;
-    public int Maxroom,Countrooms;//ルームの人数は最大4人まで
+    public int Maxroom, Countrooms;//ルームの人数は最大4人まで
     public bool ServerFlg; //サーバーフラグ
     bool MainGameSwithc;
     public void Login(string ip, bool sf)
@@ -25,6 +25,8 @@ public class multiController : MonoBehaviourPunCallbacks
         PhotonNetwork.PhotonServerSettings.AppSettings.Port = 5055;
         //ネットワークへの接続
         PhotonNetwork.ConnectUsingSettings();
+        //送信回数の設定
+        PhotonNetwork.SerializationRate = 1;  //１秒に１回だけ通信する
     }
     // Start is called before the first frame update
     void Start()
@@ -61,42 +63,67 @@ public class multiController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         ProText.SetActive(true);
-        if (ServerFlg == true)
+
         {
-            //Countrooms++;
-            //RPC(遠隔手続き呼び出し)
-            //photonView.RPC("TargetHit", RpcTarget.All, Countrooms);
-
-            Debug.Log(Countrooms);
+            //if (ServerFlg == true)
+            //{
+            //    PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-50, -21, 0), Quaternion.identity);
+            //    //PhotonNetwork.JoinOrCreateRoom();
+            //}
+            ////ランダムな位置にネットワークオブジェクトを生成する
+            //var v = new Vector3(-5f, 1, 0);
+            //GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+            ////サーバーなら赤、クライアントなら青にする
+            //if (ServerFlg)
+            //{
+            //    go.GetComponent<PlayerController>().Ptext = "Player1";
+            //}
+            //else
+            //{
+            //    go.GetComponent<PlayerController>().Ptext = "Player2";
+            //}
         }
-        else if (ServerFlg == false)
+
         {
-            //Countrooms++;
-            //RPC(遠隔手続き呼び出し)
-            //photonView.RPC("TargetHit", RpcTarget.All, Countrooms);
+            //PhotonNetwork.OnRoomPropertiesUpdate();
+            //PhotonNetwork.room.SetCustomProperties();
 
-            Debug.Log(Countrooms);
+            //if (ServerFlg == true)
+            //{
+            //    //Countrooms++;
+            //    //RPC(遠隔手続き呼び出し)
+            //    //photonView.RPC("TargetHit", RpcTarget.All, Countrooms);
+
+            //    Debug.Log(Countrooms);
+            //}
+            //else if (ServerFlg == false)
+            //{
+            //    //Countrooms++;
+            //    //RPC(遠隔手続き呼び出し)
+            //    //photonView.RPC("TargetHit", RpcTarget.All, Countrooms);
+
+            //    Debug.Log(Countrooms);
+            //}
+
+            //if (ServerFlg == true && Countrooms <= Maxroom)
+            //{
+            //    Countrooms++;
+            //    Debug.Log(Countrooms);
+            //    s = Countrooms.ToString("000");
+            //    tm.text = s;
+            //}
+            //else if (ServerFlg == false && Countrooms <= Maxroom)
+            //{
+            //    Countrooms++;
+            //    Debug.Log(Countrooms);
+            //    s = Countrooms.ToString("000");
+            //    tm.text = s;
+            //}
+            //else
+            //{
+            //    Debug.Log("満員");
+            //}
         }
-        //if (ServerFlg == true && Countrooms <= Maxroom)
-        //{
-        //    Countrooms++;
-        //    Debug.Log(Countrooms);
-        //    s = Countrooms.ToString("000");
-        //    tm.text = s;
-        //}
-        //else if (ServerFlg == false && Countrooms <= Maxroom)
-        //{
-        //    Countrooms++;
-        //    Debug.Log(Countrooms);
-        //    s = Countrooms.ToString("000");
-        //    tm.text = s;
-        //}
-        //else
-        //{
-        //    Debug.Log("満員");
-        //}
-
-
 
         {
 
@@ -118,33 +145,77 @@ public class multiController : MonoBehaviourPunCallbacks
         }
     }
 
-    //int a;
-    //string b;
+    //ルームに入れなかったとき
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        ProText.SetActive(true);
+        tm.text = "入れなかった";
+    }
 
-    //void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    if (stream.isWriting)
-    //    {
-    //        //データの送信
-    //        stream.SendNext(a);
-    //        stream.SendNext(b);
-    //    }
-    //    else
-    //    {
-    //        //データの受信
-    //        a = (int)stream.ReceiveNext();
-    //        b = (string)stream.ReceiveNext();
-    //    }
-    //}
+    void t()
+    {
 
-    //他の誰か（プレイヤー）が部屋に来た時に呼ばれる
-    //public override void OnPlayerEnteredRoom(Player newPlayer)
-    //{
-    //    Countrooms++;
-    //    Debug.Log(Countrooms);
-    //    s = Countrooms.ToString("000");
-    //    tm.text = s;
-    //}
+
+        //int a;
+        //string b;
+
+        //void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        //{
+        //    if (stream.isWriting)
+        //    {
+        //        //データの送信
+        //        stream.SendNext(a);
+        //        stream.SendNext(b);
+        //    }
+        //    else
+        //    {
+        //        //データの受信
+        //        a = (int)stream.ReceiveNext();
+        //        b = (string)stream.ReceiveNext();
+        //    }
+        //}
+
+        //他の誰か（プレイヤー）が部屋に来た時に呼ばれる
+        //public override void OnPlayerEnteredRoom(Player newPlayer)
+        //{
+        //    Countrooms++;
+        //    Debug.Log(Countrooms);
+        //    s = Countrooms.ToString("000");
+        //    tm.text = s;
+        //}
+    }//関係ない
+
+    // ルームリストに更新があった時
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        //Countrooms += 1;
+        Debug.Log("OnRoomListUpdate");
+    }
+
+    //PhotonNetwork.CurrentRoom.IsOpen = false;が動いたときにルームプロパティが変更されたので動く
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        //※この場合ServerFlgがtrueのオブジェクト以外にこの処理が動く
+        //Countrooms += 1;
+        Debug.Log("OnRoomPropertiesUpdate");
+        //if (ServerFlg == true)
+        //{
+        //    PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-50, -21, 0), Quaternion.identity);
+        //    //PhotonNetwork.JoinOrCreateRoom();
+        //}
+        //ランダムな位置にネットワークオブジェクトを生成する
+        var v = new Vector3(-5f, 1, 0);
+        GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+        //サーバーなら赤、クライアントなら青にする
+        //if (ServerFlg)
+        //{
+        //    go.GetComponent<PlayerController>().Ptext = "Player1";
+        //}
+        //else
+        //{
+            go.GetComponent<PlayerController>().Ptext = "Player2"+ Countrooms;
+        //}
+    }
 
     //
     int status = 0;
@@ -169,13 +240,14 @@ public class multiController : MonoBehaviourPunCallbacks
 
         if (Countrooms>= Maxroom && MainGameSwithc==true)
         {
-            Countrooms = 999;
-            if (ServerFlg == true) {
-                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-50, -21, 0), Quaternion.identity);
+            //Countrooms = 999;
+            if (ServerFlg == true)
+            {
+                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-55, -21, 0), Quaternion.identity);
                 //PhotonNetwork.JoinOrCreateRoom();
             }
             //ランダムな位置にネットワークオブジェクトを生成する
-            var v = new Vector3(-5f,1, 0);
+            var v = new Vector3(-5f, 1, 0);
             GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
             //サーバーなら赤、クライアントなら青にする
             if (ServerFlg)
@@ -186,6 +258,26 @@ public class multiController : MonoBehaviourPunCallbacks
             {
                 go.GetComponent<PlayerController>().Ptext = "Player2";
             }
+            //if (Countrooms >= Maxroom)
+            //{
+            PhotonNetwork.CurrentRoom.IsOpen = false;//この処理が動くとこれ以降他の人がルームに入れない
+            //}
+            //if (ServerFlg == true) {
+            //    PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-50, -21, 0), Quaternion.identity);
+            //    //PhotonNetwork.JoinOrCreateRoom();
+            //}
+            ////ランダムな位置にネットワークオブジェクトを生成する
+            //var v = new Vector3(-5f,1, 0);
+            //GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+            ////サーバーなら赤、クライアントなら青にする
+            //if (ServerFlg)
+            //{
+            //    go.GetComponent<PlayerController>().Ptext = "Player1";
+            //}
+            //else
+            //{
+            //    go.GetComponent<PlayerController>().Ptext = "Player2";
+            //}
             MainGameSwithc = false;
         }
         //else if (MainGameSwithc == true)
