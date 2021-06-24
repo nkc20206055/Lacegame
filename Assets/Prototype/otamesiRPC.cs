@@ -12,6 +12,7 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
     public Text oText;
     string s;
     public int SaveCount;
+    public byte saveC;
     private bool tt;
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,7 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         if (oD.ServerFlg == true)
         {
             oD.Countrooms++;
+            saveC++;
         }
     }
 
@@ -46,6 +48,7 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         if (oD.ServerFlg == true)
         {
             oD.Countrooms--;
+            saveC--;
         }
     }
 

@@ -38,10 +38,11 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/
     {
         if (photonView.IsMine)
         {
+            Vector3 plpos = transform.position;
             Maincamera = GameObject.Find("Main Camera");
             Maincamera.transform.parent = transform;
             //Camerapos = new Vector3(0, 2.95f, -5.14f);
-            Camerapos = new Vector3(-5f, 2.5f,-5f);
+            Camerapos = new Vector3(plpos.x, plpos.y+2.5f, plpos.z + -5f);
             Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
         }
 
