@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/
+using System.Collections.Generic;
+
+public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPunObservable
 {
     public float Speed = 5;
     public string Ptext;
@@ -123,5 +125,57 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/
             }
             transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * speed);
         }
+        else
+        {
+            //移動速度を指定する
+            GetComponent<Rigidbody>().velocity = velo;
+            //回転速度を指定する
+            GetComponent<Rigidbody>().angularVelocity = angul;
+        }
+    }
+
+    // データの送受信
+    Vector3 velo;    //受信した移動速度
+    Vector3 angul;   //受信した回転速度
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        //if (stream.IsWriting) //自分のオブジェクトの時
+        //{
+        //    stream.SendNext(transform.position);                        //表示座標送信
+        //    stream.SendNext(transform.localEulerAngles);                //回転角度送信
+        //    stream.SendNext(GetComponent<Rigidbody>().velocity);        //移動速度送信
+        //    stream.SendNext(GetComponent<Rigidbody>().angularVelocity); //回転速度送信
+        //}
+        //else   //他人のオブジェクトの時
+        //{
+        //    transform.position = (Vector3)stream.ReceiveNext();         //表示座標受信
+        //    transform.localEulerAngles = (Vector3)stream.ReceiveNext(); //回転角度受信
+        //    velo = (Vector3)stream.ReceiveNext();                       //移動速度受信
+        //    angul = (Vector3)stream.ReceiveNext();                      //回転速度受信
+        //}
+
+        if (stream.IsWriting) //自分のオブジェクトの時
+        {
+            string msg = transform.position + ";"                   //表示座標
+                       + transform.localEulerAngles + ";"           //回転角度
+                       + GetComponent<Rigidbody>().velocity + ";"   //移動速度
+                       + GetComponent<Rigidbody>().angularVelocity; //回転速度
+            stream.SendNext(msg);                                   //メッセージ出力
+        }
+        else                //他人のオブジェクトの時
+        {
+            string msg = stream.ReceiveNext().ToString();           //メッセージ入力
+            string[] p = msg.Split(';');                            //「;」で区切る
+            transform.position = Str2vec3(p[0]);                    //表示座標修正
+            transform.localEulerAngles = Str2vec3(p[1]);            //回転角度修正
+            velo = Str2vec3(p[2]);                                  //移動速度保存
+            angul = Str2vec3(p[3]);                                 //回転速度保存
+        }
+    }
+
+        //文字列をVector3に変換
+    Vector3 Str2vec3(string str){
+        string[] xyz = str.Trim('(', ')').Split(',');   //カッコを削除してカンマで分割
+        return(new Vector3(float.Parse(xyz[0]), float.Parse(xyz[1]), float.Parse(xyz[2])));
     }
 }
