@@ -16,7 +16,8 @@ public class multiController : MonoBehaviourPunCallbacks
     public int Maxroom, Countrooms;//ルームの人数は最大4人まで
     public byte otame;
     public bool ServerFlg; //サーバーフラグ
-    bool MainGameSwithc;
+    int otamesI;
+    bool MainGameSwithc,SaveSwithc;
     public void Login(string ip, bool sf)
     {
         //サーバーフラグの設定
@@ -41,6 +42,7 @@ public class multiController : MonoBehaviourPunCallbacks
         //PhotonNetwork.ConnectUsingSettings();
 
         MainGameSwithc = true;
+        SaveSwithc = true;
         GD = GameObject.Find("GameDerector").GetComponent<GameDerector>();
         Maxroom = 4;
     }
@@ -69,8 +71,9 @@ public class multiController : MonoBehaviourPunCallbacks
         //otame = (byte)i;
         if (ServerFlg == false)
         {
-            orpc = GameObject.Find("Otamesirpc").GetComponent<otamesiRPC>();
-            otame = orpc.saveC;
+            //orpc = GameObject.Find("Otamesirpc").GetComponent<otamesiRPC>();
+            //otame = orpc.saveC;
+            //otamesI = Countrooms;
         }
         {
             //if (ServerFlg == true)
@@ -211,19 +214,36 @@ public class multiController : MonoBehaviourPunCallbacks
         //    PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-50, -21, 0), Quaternion.identity);
         //    //PhotonNetwork.JoinOrCreateRoom();
         //}
-        //ランダムな位置にネットワークオブジェクトを生成する
-        orpc = GameObject.Find("Otamesirpc").GetComponent<otamesiRPC>();
-        var v = new Vector3(-2f, 1, 0);
-        GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
-        //サーバーなら赤、クライアントなら青にする
-        //if (ServerFlg)
-        //{
-        //    go.GetComponent<PlayerController>().Ptext = "Player1";
-        //}
-        //else
-        //{
-            go.GetComponent<PlayerController>().Ptext = "Player2"+ /*orpc.SaveCount*/otame;
-        //}
+        if (ServerFlg == false)
+        {
+            //ランダムな位置にネットワークオブジェクトを生成する
+            orpc = GameObject.Find("Otamesirpc").GetComponent<otamesiRPC>();
+            //switch (PV.ViewID)
+            //{
+            //    case:
+            //}
+            var v = new Vector3(-5f, 1, 0);
+            GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+            PhotonView PV = go.GetComponent<PhotonView>();
+            //サーバーなら赤、クライアントなら青にする
+            //if (ServerFlg==false)
+            //{
+            if (PV.ViewID == 2001)
+            {
+                go.GetComponent<PlayerController>().Ptext = "Player2"/* +*/ /*orpc.SaveCount*//*PV.ViewID*/;
+                go.transform.position= new Vector3(-5f, 1, 0);
+            }
+            else if (PV.ViewID == 3001)
+            {
+                go.GetComponent<PlayerController>().Ptext = "Player3";
+                go.transform.position = new Vector3(-5f, 1, -2);
+            }
+            else if (PV.ViewID == 4001)
+            {
+                go.GetComponent<PlayerController>().Ptext = "Player4";
+                go.transform.position = new Vector3(-5f, 1, -4);
+            }
+        }
     }
 
     //
@@ -247,6 +267,12 @@ public class multiController : MonoBehaviourPunCallbacks
             Debug.Log("ルームに参加中");
         }
 
+        if (SaveSwithc==true)
+        {
+            otamesI = Countrooms;
+            SaveSwithc = false;
+        }
+
         if (Countrooms>= Maxroom && MainGameSwithc==true)
         {
             //Countrooms = 999;
@@ -254,13 +280,16 @@ public class multiController : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-42, -21, 0), Quaternion.identity);
                 //PhotonNetwork.JoinOrCreateRoom();
+
             }
-            //ランダムな位置にネットワークオブジェクトを生成する
-            var v = new Vector3(-5f, 1, 3);
-            GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
-            //サーバーなら赤、クライアントなら青にする
             if (ServerFlg)
             {
+                //ランダムな位置にネットワークオブジェクトを生成する
+                var v = new Vector3(-5f, 1, 5);
+            GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+            //サーバーなら赤、クライアントなら青にする
+            //if (ServerFlg)
+            //{
                 go.GetComponent<PlayerController>().Ptext = "Player1";
             }
             //if (Countrooms >= Maxroom)

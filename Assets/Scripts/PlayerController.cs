@@ -41,22 +41,21 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/
             Vector3 plpos = transform.position;
             Maincamera = GameObject.Find("Main Camera");
             Maincamera.transform.parent = transform;
-            //Camerapos = new Vector3(0, 2.95f, -5.14f);
-            Camerapos = new Vector3(plpos.x, plpos.y+2.5f, plpos.z + -5f);
+            Camerapos = new Vector3(0, 2.95f, -5.14f);
+            Camerapos = new Vector3(plpos.x, plpos.y + 2.5f, plpos.z + -6f);
             Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
         }
-
         rigidbody = gameObject.GetComponent<Rigidbody>();
-
-        //Maincamera = GameObject.Find("Main Camera");
-        ////offset = transform.position - Maincamera.transform.position;
-        ////Camerapos = new Vector3(0,1.95f,-5.14f);
-        //Camerapos = new Vector3(0, -1.95f, 5f);
-        //Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
-        //offset = transform.position - Maincamera.transform.position;
-        //Debug.Log(offset);
-        ////Debug.Log(Maincamera);
-
+        {
+            //Maincamera = GameObject.Find("Main Camera");
+            ////offset = transform.position - Maincamera.transform.position;
+            ////Camerapos = new Vector3(0,1.95f,-5.14f);
+            //Camerapos = new Vector3(0, -1.95f, 5f);
+            //Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
+            //offset = transform.position - Maincamera.transform.position;
+            //Debug.Log(offset);
+            ////Debug.Log(Maincamera);
+        }
         textM = transform.GetChild(0).gameObject;//Apple内にある子オブジェクトのtextObを取得する
         TM = textM.GetComponent<TextMesh>();
         //Debug.Log(TM);
@@ -114,7 +113,6 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/
             float y = Input.GetAxis("Vertical");
             transform.Rotate(0, x, 0);
 
-            //rigidbody.velocity = new Vector3(x, 0, y) * 10;
             if (y != 0 && Speed >= speed)
             {
                 speed = speed + 0.2f;

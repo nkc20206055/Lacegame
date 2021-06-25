@@ -27,8 +27,11 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         {
             oD.Countrooms++;
             SaveCount = oD.Countrooms;
+
+            //SaveCount++;
+
             //RPC(遠隔手続き呼び出し)
-            photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms);
+            photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms/*SaveCount*/);
         }
     }
 
@@ -38,6 +41,7 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         if (oD.ServerFlg == true)
         {
             oD.Countrooms++;
+            //SaveCount++;
             saveC++;
         }
     }
@@ -48,6 +52,7 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         if (oD.ServerFlg == true)
         {
             oD.Countrooms--;
+            //SaveCount--;
             saveC--;
         }
     }
@@ -59,16 +64,22 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (/*oD.ServerFlg == true*/SaveCount != oD.Countrooms&&SaveCount<=4)
-        {
-            photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms);
+        //if (oD.ServerFlg == true)
+        //{
+            if (/*oD.ServerFlg == true*/SaveCount != oD.Countrooms && SaveCount <= 4)
+            {
+                photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms/*SaveCount*/);
             SaveCount = oD.Countrooms;
 
-        }else if (tt == true && SaveCount >= 4)
-        {
+            }
+            else if (tt == true && SaveCount >= 4)
+            {
+                photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms/*SaveCount*/);
+            SaveCount = oD.Countrooms;
             tt = false;
-        }
-        //photonView.RPC("PlayerON", RpcTarget.All,tt);
+            }
+            //photonView.RPC("PlayerON", RpcTarget.All,tt);
+        //}
     }
     //すべての端末で実行される
     [PunRPC]
@@ -77,7 +88,8 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         //s = t.ToString("000");
         //oText.text = s;
         oText.text = t.ToString(/*"000"*/);
-        //oD.Countrooms = SaveCount;
+        //oD.Countrooms = t;
+        //SaveCount = oD.Countrooms;
     }
     //[PunRPC]
     //public void PlayerON(bool o)
