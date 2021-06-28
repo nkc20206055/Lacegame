@@ -227,6 +227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 15
+  GateCount: 0
+  GoalCount: 0
   Ptext: 
   speed: 0
 --- !u!114 &304012182200495226

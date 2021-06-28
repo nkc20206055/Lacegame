@@ -43,43 +43,50 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     // Start is called before the first frame update
     void Start()
     {
-        //if (photonView.IsMine)
-        //{
+        if (photonView.IsMine)
+        {
             Vector3 plpos = transform.position;
             Maincamera = GameObject.Find("Main Camera");
             Maincamera.transform.parent = transform;
             Camerapos = new Vector3(0, 2.95f, -5.14f);
             Camerapos = new Vector3(plpos.x, plpos.y + 2.5f, plpos.z + -6f);
             Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
-        //}
-        rigidbody = gameObject.GetComponent<Rigidbody>();
-
-        PlayerUi = GameObject.Find("PlayerText");
-        // PlayerUiの子オブジェクトの中からアクティブなオブジェクトを探す
-        lapText = PlayerUi.transform.Find("LapText");
-        Debug.Log("target2(transform) = " + lapText);
-        Debug.Log("target2(gameObject) = " + lapText.gameObject);
-        T = lapText.gameObject.GetComponent<Text>();
-
-        // PlayerUiの子オブジェクトの中から非アクティブなオブジェクトを探す
-        goalText = PlayerUi.transform.Find("GoalText");
-        Debug.Log("target3(transform) = " + goalText);
-        Debug.Log("target3(gameObject) = " + goalText.gameObject);
-
-        {
-            //Maincamera = GameObject.Find("Main Camera");
-            ////offset = transform.position - Maincamera.transform.position;
-            ////Camerapos = new Vector3(0,1.95f,-5.14f);
-            //Camerapos = new Vector3(0, -1.95f, 5f);
-            //Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
-            //offset = transform.position - Maincamera.transform.position;
-            //Debug.Log(offset);
-            ////Debug.Log(Maincamera);
         }
-        textM = transform.GetChild(0).gameObject;//Apple内にある子オブジェクトのtextObを取得する
-        TM = textM.GetComponent<TextMesh>();
-        //Debug.Log(TM);
-        TM.text = Ptext;
+
+
+        //rigidbody = gameObject.GetComponent<Rigidbody>();
+        if (photonView.IsMine)
+        {
+            PlayerUi = GameObject.Find("PlayerText");
+            // PlayerUiの子オブジェクトの中からアクティブなオブジェクトを探す
+            lapText = PlayerUi.transform.Find("LapText");
+            Debug.Log("target2(transform) = " + lapText);
+            Debug.Log("target2(gameObject) = " + lapText.gameObject);
+            T = lapText.gameObject.GetComponent<Text>();
+
+            // PlayerUiの子オブジェクトの中から非アクティブなオブジェクトを探す
+            goalText = PlayerUi.transform.Find("GoalText");
+            Debug.Log("target3(transform) = " + goalText);
+            Debug.Log("target3(gameObject) = " + goalText.gameObject);
+
+            {
+                //Maincamera = GameObject.Find("Main Camera");
+                ////offset = transform.position - Maincamera.transform.position;
+                ////Camerapos = new Vector3(0,1.95f,-5.14f);
+                //Camerapos = new Vector3(0, -1.95f, 5f);
+                //Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
+                //offset = transform.position - Maincamera.transform.position;
+                //Debug.Log(offset);
+                ////Debug.Log(Maincamera);
+            }
+            textM = transform.GetChild(0).gameObject;//Apple内にある子オブジェクトのtextObを取得する
+            TM = textM.GetComponent<TextMesh>();
+            //Debug.Log(TM);
+            TM.text = Ptext;
+
+            Vector3 pPos = transform.position;
+            GatePos = new Vector3(pPos.x, pPos.y + 1, pPos.z);
+        }
     }
 
     // Update is called once per frame
@@ -124,17 +131,20 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         //    offset = Maincamera.transform.position - transform.position;
         //}
 
-        if (transform.position.y<=-5)//落ちた時の処理
+        if (photonView.IsMine)
         {
-            Debug.Log("落ちた");
-            transform.position = GatePos;
+            if (transform.position.y <= -5)//落ちた時の処理
+            {
+                Debug.Log("落ちた");
+                transform.position = GatePos;
+            }
         }
     }
 
     void FixedUpdate()
     {
-        //if (photonView.IsMine)//移動
-        //{
+        if (photonView.IsMine)//移動
+        {
             float x = Input.GetAxis("Horizontal");
             float y = Input.GetAxis("Vertical");
             transform.Rotate(0, x, 0);
@@ -148,20 +158,20 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                 speed = speed * 0.98f;
             }
             transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * speed);
-        //}
-        //else
-        //{
-        //    //移動速度を指定する
-        //    GetComponent<Rigidbody>().velocity = velo;
-        //    //回転速度を指定する
-        //    GetComponent<Rigidbody>().angularVelocity = angul;
-        //}
+        }
+        else
+        {
+            //移動速度を指定する
+            GetComponent<Rigidbody>().velocity = velo;
+            //回転速度を指定する
+            GetComponent<Rigidbody>().angularVelocity = angul;
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        //if (photonView.IsMine)
-        //{
+        if (photonView.IsMine)
+        {
             if (other.gameObject.tag == "Goal" && GateCount >= 6)
             {
                 int G;
@@ -183,12 +193,13 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             if (other.gameObject.tag == "Gate")
             {
                 if (GoalCount<3) {
-                   GatePos = other.transform.position;
+                    Vector3 Gpos = other.transform.position;
+                   GatePos = new Vector3(Gpos.x,Gpos.y+1,Gpos.z);
                    GateCount++;
                    Debug.Log("gatepoint " + GateCount);
                 }
             }
-        //}
+        }
     }
 
     // データの送受信
