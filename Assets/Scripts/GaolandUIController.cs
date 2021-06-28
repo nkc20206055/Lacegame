@@ -19,19 +19,19 @@ public class GaolandUIController : /*MonoBehaviour*/MonoBehaviourPunCallbacks
     }
     void OnTriggerEnter(Collider other)
     {
-        if (photonView.IsMine)
-        {
-            if (other.gameObject.tag == "Goal" && GateCount >= 6)
-            {
-                Debug.Log("ゴール");
-                GoalCount++;
-                GateCount = 0;
-            }
-            if (other.gameObject.tag == "Gate")
-            {
-                Debug.Log("gatepoint");
-                GateCount++;
-            }
-        }
+        //if (photonView.IsMine)
+        //{
+        //    if (other.gameObject.tag == "Goal" && GateCount >= 6)
+        //    {
+        //        Debug.Log("ゴール");
+        //        GoalCount++;
+        //        GateCount = 0;
+        //    }
+        //    if (other.gameObject.tag == "Gate")
+        //    {
+        //        Debug.Log("gatepoint");
+        //        GateCount++;
+        //    }
+        //}
     }
 }

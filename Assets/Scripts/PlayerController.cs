@@ -1,19 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
-using System.Collections.Generic;
+//using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPunObservable
 {
     public float Speed = 5;
+    public int GateCount, GoalCount;
     public string Ptext;
     public float speed;
-    GameObject textM,Maincamera;
+    GameObject textM,Maincamera,PlayerUi;
+    Transform lapText, goalText;//PlayerUIの子オブジェクト取得
+    Text T;
     TextMesh TM;
     Vector3 Plpos,Camerapos,mixpos;
     Rigidbody rigidbody;
+    Vector3 GatePos;
     private Vector3 offset;//中心座標
     void PCamera(float x)
     {
@@ -38,16 +43,29 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     // Start is called before the first frame update
     void Start()
     {
-        if (photonView.IsMine)
-        {
+        //if (photonView.IsMine)
+        //{
             Vector3 plpos = transform.position;
             Maincamera = GameObject.Find("Main Camera");
             Maincamera.transform.parent = transform;
             Camerapos = new Vector3(0, 2.95f, -5.14f);
             Camerapos = new Vector3(plpos.x, plpos.y + 2.5f, plpos.z + -6f);
             Maincamera.transform.position = Camerapos;//Main CameraをAppleに映るように配置
-        }
+        //}
         rigidbody = gameObject.GetComponent<Rigidbody>();
+
+        PlayerUi = GameObject.Find("PlayerText");
+        // PlayerUiの子オブジェクトの中からアクティブなオブジェクトを探す
+        lapText = PlayerUi.transform.Find("LapText");
+        Debug.Log("target2(transform) = " + lapText);
+        Debug.Log("target2(gameObject) = " + lapText.gameObject);
+        T = lapText.gameObject.GetComponent<Text>();
+
+        // PlayerUiの子オブジェクトの中から非アクティブなオブジェクトを探す
+        goalText = PlayerUi.transform.Find("GoalText");
+        Debug.Log("target3(transform) = " + goalText);
+        Debug.Log("target3(gameObject) = " + goalText.gameObject);
+
         {
             //Maincamera = GameObject.Find("Main Camera");
             ////offset = transform.position - Maincamera.transform.position;
@@ -105,12 +123,18 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         //    // transform.RotateAround(Vector3.zero,Vector3.up,-2.0f);
         //    offset = Maincamera.transform.position - transform.position;
         //}
+
+        if (transform.position.y<=-5)//落ちた時の処理
+        {
+            Debug.Log("落ちた");
+            transform.position = GatePos;
+        }
     }
 
     void FixedUpdate()
     {
-        if (photonView.IsMine)
-        {
+        //if (photonView.IsMine)//移動
+        //{
             float x = Input.GetAxis("Horizontal");
             float y = Input.GetAxis("Vertical");
             transform.Rotate(0, x, 0);
@@ -124,14 +148,47 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                 speed = speed * 0.98f;
             }
             transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * speed);
-        }
-        else
-        {
-            //移動速度を指定する
-            GetComponent<Rigidbody>().velocity = velo;
-            //回転速度を指定する
-            GetComponent<Rigidbody>().angularVelocity = angul;
-        }
+        //}
+        //else
+        //{
+        //    //移動速度を指定する
+        //    GetComponent<Rigidbody>().velocity = velo;
+        //    //回転速度を指定する
+        //    GetComponent<Rigidbody>().angularVelocity = angul;
+        //}
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        //if (photonView.IsMine)
+        //{
+            if (other.gameObject.tag == "Goal" && GateCount >= 6)
+            {
+                int G;
+                //Debug.Log("ゴール");
+                GoalCount++;
+                if (GoalCount >= 3)
+                {
+                    Debug.Log("ゴール");
+                    goalText.gameObject.SetActive(true);
+                }
+                else
+                { 
+                    G = GoalCount + 1;
+                //T = GameObject.Find("LapText").GetComponent<Text>();
+                T.text = " Lap " + G + "/3";
+                GateCount = 0;
+                }
+            }
+            if (other.gameObject.tag == "Gate")
+            {
+                if (GoalCount<3) {
+                   GatePos = other.transform.position;
+                   GateCount++;
+                   Debug.Log("gatepoint " + GateCount);
+                }
+            }
+        //}
     }
 
     // データの送受信
