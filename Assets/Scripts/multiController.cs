@@ -28,8 +28,10 @@ public class multiController : MonoBehaviourPunCallbacks
         PhotonNetwork.PhotonServerSettings.AppSettings.Port = 5055;
         //ネットワークへの接続
         PhotonNetwork.ConnectUsingSettings();
+
         //送信回数の設定
-        PhotonNetwork.SerializationRate = 1;  //１秒に１回だけ通信する
+        //PhotonNetwork.SerializationRate = 1;  //１秒に１回だけ通信する
+        PhotonNetwork.SerializationRate = 10;  //お試し
     }
     // Start is called before the first frame update
     void Start()
@@ -230,17 +232,17 @@ public class multiController : MonoBehaviourPunCallbacks
             //{
             if (PV.ViewID == 2001)
             {
-                go.GetComponent<PlayerController>().Ptext = "Player2"/* +*/ /*orpc.SaveCount*//*PV.ViewID*/;
+                //go.GetComponent<PlayerController>().Ptext = "Player2"/* +*/ /*orpc.SaveCount*//*PV.ViewID*/;
                 go.transform.position= new Vector3(-5f, 1, 0);
             }
             else if (PV.ViewID == 3001)
             {
-                go.GetComponent<PlayerController>().Ptext = "Player3";
+                //go.GetComponent<PlayerController>().Ptext = "Player3";
                 go.transform.position = new Vector3(-5f, 1, -2);
             }
             else if (PV.ViewID == 4001)
             {
-                go.GetComponent<PlayerController>().Ptext = "Player4";
+                //go.GetComponent<PlayerController>().Ptext = "Player4";
                 go.transform.position = new Vector3(-5f, 1, -4);
             }
         }
@@ -290,7 +292,7 @@ public class multiController : MonoBehaviourPunCallbacks
             //サーバーなら赤、クライアントなら青にする
             //if (ServerFlg)
             //{
-                go.GetComponent<PlayerController>().Ptext = "Player1";
+                //go.GetComponent<PlayerController>().Ptext = "Player1";
             }
             //if (Countrooms >= Maxroom)
             //{

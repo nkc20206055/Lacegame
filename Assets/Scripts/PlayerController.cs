@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     Vector3 Plpos,Camerapos,mixpos;
     Rigidbody rigidbody;
     Vector3 GatePos;
+    bool IPswitht;
     private Vector3 offset;//中心座標
     void PCamera(float x)
     {
@@ -38,6 +39,38 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             Maincamera.transform.RotateAround(transform.position, Vector3.up, -60.0f * Time.deltaTime);
             // transform.RotateAround(Vector3.zero,Vector3.up,-2.0f);
             offset = Maincamera.transform.position - transform.position;
+        }
+    }
+
+    void IPp()
+    {
+        if (photonView.IsMine)
+        {
+            if (IPswitht == true)
+            {
+                PhotonView PV = gameObject.GetComponent<PhotonView>();
+                if (PV.ViewID == 1001)
+                {
+                    Ptext = "Player1";
+                    TM.text = Ptext;
+                }
+                else if (PV.ViewID == 2001)
+                {
+                    Ptext = "Player2";
+                    TM.text = Ptext;
+                }
+                else if (PV.ViewID == 3001)
+                {
+                    Ptext = "Player3";
+                    TM.text = Ptext;
+                }
+                else if (PV.ViewID == 4001)
+                {
+                    Ptext = "Player4";
+                    TM.text = Ptext;
+                }
+                IPswitht = false;
+            }
         }
     }
     // Start is called before the first frame update
@@ -86,50 +119,54 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
 
             Vector3 pPos = transform.position;
             GatePos = new Vector3(pPos.x, pPos.y + 1, pPos.z);
+            IPswitht = true;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //自分のオブジェクトだけ移動する
-        //if (photonView.IsMine)
-        //{
-        //    float x = Input.GetAxis("Horizontal");
-        //    float y = Input.GetAxis("Vertical");
-        //    transform.Translate(new Vector3(x, y, 0) * Time.deltaTime * Speed);
-        //}
+        {
+            //自分のオブジェクトだけ移動する
+            //if (photonView.IsMine)
+            //{
+            //    float x = Input.GetAxis("Horizontal");
+            //    float y = Input.GetAxis("Vertical");
+            //    transform.Translate(new Vector3(x, y, 0) * Time.deltaTime * Speed);
+            //}
 
-        //float x = Input.GetAxis("Horizontal");
-        //float y = Input.GetAxis("Vertical");
-        //PCamera(x);]
+            //float x = Input.GetAxis("Horizontal");
+            //float y = Input.GetAxis("Vertical");
+            //PCamera(x);]
 
-        //transform.Rotate(0, x, 0);
-        //rigidbody.AddForce(new Vector3(0, 0, y) * 5);
+            //transform.Rotate(0, x, 0);
+            //rigidbody.AddForce(new Vector3(0, 0, y) * 5);
 
-        //transform.Rotate(0, x, 0);
-        //rigidbody.velocity = new Vector3(0, 0, y) * 10;
+            //transform.Rotate(0, x, 0);
+            //rigidbody.velocity = new Vector3(0, 0, y) * 10;
 
-        //transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * Speed);
-        //transform.Rotate(0, x, 0);
+            //transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * Speed);
+            //transform.Rotate(0, x, 0);
 
-        ////カメラ追従
-        //// まずはカメラ位置をプレイヤーに追従させて...
-        //Maincamera.transform.position = transform.position + offset;
-        //// プレイヤーを中心にカメラを回すと、プレイヤーとカメラの相対位置が
-        //// 変化するはずなので、RotateAroundの後でoffsetを更新する
-        //if (x>=1)
-        //{
-        //    Maincamera.transform.RotateAround(transform.position, Vector3.up, 1.0f);
-        //    // transform.RotateAround(Vector3.zero,Vector3.up,-2.0f);
-        //    offset = Maincamera.transform.position - transform.position;
-        //}
-        //if (x <= -1)
-        //{
-        //    Maincamera.transform.RotateAround(transform.position, Vector3.up, -1.0f);
-        //    // transform.RotateAround(Vector3.zero,Vector3.up,-2.0f);
-        //    offset = Maincamera.transform.position - transform.position;
-        //}
+            ////カメラ追従
+            //// まずはカメラ位置をプレイヤーに追従させて...
+            //Maincamera.transform.position = transform.position + offset;
+            //// プレイヤーを中心にカメラを回すと、プレイヤーとカメラの相対位置が
+            //// 変化するはずなので、RotateAroundの後でoffsetを更新する
+            //if (x>=1)
+            //{
+            //    Maincamera.transform.RotateAround(transform.position, Vector3.up, 1.0f);
+            //    // transform.RotateAround(Vector3.zero,Vector3.up,-2.0f);
+            //    offset = Maincamera.transform.position - transform.position;
+            //}
+            //if (x <= -1)
+            //{
+            //    Maincamera.transform.RotateAround(transform.position, Vector3.up, -1.0f);
+            //    // transform.RotateAround(Vector3.zero,Vector3.up,-2.0f);
+            //    offset = Maincamera.transform.position - transform.position;
+            //}
+        }//関係ない
+        IPp();
 
         if (photonView.IsMine)
         {
@@ -246,23 +283,25 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             angul = (Vector3)stream.ReceiveNext();                      //回転速度受信
         }
 
-        //if (stream.IsWriting) //自分のオブジェクトの時
-        //{
-        //    string msg = transform.position + ";"                   //表示座標
-        //               + transform.localEulerAngles + ";"           //回転角度
-        //               + GetComponent<Rigidbody>().velocity + ";"   //移動速度
-        //               + GetComponent<Rigidbody>().angularVelocity; //回転速度
-        //    stream.SendNext(msg);                                   //メッセージ出力
-        //}
-        //else                //他人のオブジェクトの時
-        //{
-        //    string msg = stream.ReceiveNext().ToString();           //メッセージ入力
-        //    string[] p = msg.Split(';');                            //「;」で区切る
-        //    transform.position = Str2vec3(p[0]);                    //表示座標修正
-        //    transform.localEulerAngles = Str2vec3(p[1]);            //回転角度修正
-        //    velo = Str2vec3(p[2]);                                  //移動速度保存
-        //    angul = Str2vec3(p[3]);                                 //回転速度保存
-        //}
+        {
+            //if (stream.IsWriting) //自分のオブジェクトの時
+            //{
+            //    string msg = transform.position + ";"                   //表示座標
+            //               + transform.localEulerAngles + ";"           //回転角度
+            //               + GetComponent<Rigidbody>().velocity + ";"   //移動速度
+            //               + GetComponent<Rigidbody>().angularVelocity; //回転速度
+            //    stream.SendNext(msg);                                   //メッセージ出力
+            //}
+            //else                //他人のオブジェクトの時
+            //{
+            //    string msg = stream.ReceiveNext().ToString();           //メッセージ入力
+            //    string[] p = msg.Split(';');                            //「;」で区切る
+            //    transform.position = Str2vec3(p[0]);                    //表示座標修正
+            //    transform.localEulerAngles = Str2vec3(p[1]);            //回転角度修正
+            //    velo = Str2vec3(p[2]);                                  //移動速度保存
+            //    angul = Str2vec3(p[3]);                                 //回転速度保存
+            //}
+        }
     }
 
         //文字列をVector3に変換
