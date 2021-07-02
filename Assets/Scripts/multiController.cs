@@ -216,36 +216,37 @@ public class multiController : MonoBehaviourPunCallbacks
         //    PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-50, -21, 0), Quaternion.identity);
         //    //PhotonNetwork.JoinOrCreateRoom();
         //}
-        if (ServerFlg == false)
-        {
-            //ランダムな位置にネットワークオブジェクトを生成する
-            orpc = GameObject.Find("Otamesirpc").GetComponent<otamesiRPC>();
-            //switch (PV.ViewID)
-            //{
-            //    case:
-            //}
-            var v = new Vector3(-5f, 1, 0);
-            GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
-            PhotonView PV = go.GetComponent<PhotonView>();
+            if (ServerFlg == false)
+            {
+                //ランダムな位置にネットワークオブジェクトを生成する
+                orpc = GameObject.Find("Otamesirpc").GetComponent<otamesiRPC>();
+                //switch (PV.ViewID)
+                //{
+                //    case:
+                //}
+                var v = new Vector3(-5f, 1, 0);
+                GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+                PhotonView PV = go.GetComponent<PhotonView>();
             //サーバーなら赤、クライアントなら青にする
             //if (ServerFlg==false)
             //{
-            if (PV.ViewID == 2001)
-            {
-                //go.GetComponent<PlayerController>().Ptext = "Player2"/* +*/ /*orpc.SaveCount*//*PV.ViewID*/;
-                go.transform.position= new Vector3(-5f, 1, 0);
+            
+                if (PV.ViewID == 2001)
+                {
+                    //go.GetComponent<PlayerController>().Ptext = "Player2"/* +*/ /*orpc.SaveCount*//*PV.ViewID*/;
+                    go.transform.position = new Vector3(-4f, 1, 0);
+                }
+                else if (PV.ViewID == 3001)
+                {
+                    //go.GetComponent<PlayerController>().Ptext = "Player3";
+                    go.transform.position = new Vector3(4f, 1, -2);
+                }
+                else if (PV.ViewID == 4001)
+                {
+                    //go.GetComponent<PlayerController>().Ptext = "Player4";
+                    go.transform.position = new Vector3(-4f, 1, -4);
+                }
             }
-            else if (PV.ViewID == 3001)
-            {
-                //go.GetComponent<PlayerController>().Ptext = "Player3";
-                go.transform.position = new Vector3(-5f, 1, -2);
-            }
-            else if (PV.ViewID == 4001)
-            {
-                //go.GetComponent<PlayerController>().Ptext = "Player4";
-                go.transform.position = new Vector3(-5f, 1, -4);
-            }
-        }
     }
 
     //
@@ -280,14 +281,14 @@ public class multiController : MonoBehaviourPunCallbacks
             //Countrooms = 999;
             if (ServerFlg == true)
             {
-                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-42, -21, 0), Quaternion.identity);
+                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-42, -21, -10), Quaternion.identity);
                 //PhotonNetwork.JoinOrCreateRoom();
 
             }
             if (ServerFlg)
             {
                 //ランダムな位置にネットワークオブジェクトを生成する
-                var v = new Vector3(-5f, 1, 5);
+                var v = new Vector3(4f, 1, 5);
             GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
             //サーバーなら赤、クライアントなら青にする
             //if (ServerFlg)

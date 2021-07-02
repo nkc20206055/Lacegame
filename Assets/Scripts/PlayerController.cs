@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             if (IPswitht == true)
             {
                 PhotonView PV = gameObject.GetComponent<PhotonView>();
-                if (PV.ViewID == 1001)
+                if (PV.ViewID == 1001|| PV.ViewID == 1002)
                 {
                     Ptext = "Player1";
                     TM.text = Ptext;
