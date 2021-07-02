@@ -281,6 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProText: {fileID: 961834002}
+  PlayerText: {fileID: 1121359102}
   tm: {fileID: 2078837187}
   Maxroom: 0
   Countrooms: 0
@@ -1747,6 +1748,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1110961867}
   m_CullTransparentMesh: 0
+--- !u!1 &1121359102 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 396538916646373130, guid: 33f8cdd102dc5274f99da9dfa1ecd95e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1139744153}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1123708077
 GameObject:
   m_ObjectHideFlags: 0
@@ -1888,6 +1895,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerText
+      objectReference: {fileID: 0}
+    - target: {fileID: 396538916646373130, guid: 33f8cdd102dc5274f99da9dfa1ecd95e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 396538916646373131, guid: 33f8cdd102dc5274f99da9dfa1ecd95e,
         type: 3}

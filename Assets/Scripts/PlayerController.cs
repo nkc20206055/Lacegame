@@ -103,14 +103,14 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             PlayerUi = GameObject.Find("PlayerText");
             // PlayerUiの子オブジェクトの中からアクティブなオブジェクトを探す
             lapText = PlayerUi.transform.Find("LapText");
-            Debug.Log("target2(transform) = " + lapText);
-            Debug.Log("target2(gameObject) = " + lapText.gameObject);
+            //Debug.Log("target2(transform) = " + lapText);
+            //Debug.Log("target2(gameObject) = " + lapText.gameObject);
             T = lapText.gameObject.GetComponent<Text>();
 
             // PlayerUiの子オブジェクトの中から非アクティブなオブジェクトを探す
             goalText = PlayerUi.transform.Find("GoalText");
-            Debug.Log("target3(transform) = " + goalText);
-            Debug.Log("target3(gameObject) = " + goalText.gameObject);
+            //Debug.Log("target3(transform) = " + goalText);
+            //Debug.Log("target3(gameObject) = " + goalText.gameObject);
 
             {
                 //Maincamera = GameObject.Find("Main Camera");
@@ -122,30 +122,19 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                 //Debug.Log(offset);
                 ////Debug.Log(Maincamera);
             }
-            //textM = transform.GetChild(0).gameObject;//Apple内にある子オブジェクトのtextObを取得する
-            //TM = textM.GetComponent<TextMesh>();
-            //Debug.Log(TM);
-            //TM.text = Ptext;
 
             Vector3 pPos = transform.position;
             GatePos = new Vector3(pPos.x, pPos.y + 1, pPos.z);
             IPswitht = true;
         }
 
+        //PhotonVoew内のViewIDを取得してPlayerが何番目か調べて番号をつける
         textM = transform.GetChild(0).gameObject;//Apple内にある子オブジェクトのtextObを取得する
-
-        //string pv = GetComponent<PhotonView>().ViewID.ToString();
-        //if (pv == "1001" || pv == "1002") textM.GetComponent<TextMesh>().text = "Player1";
-        //if (pv == "2001") textM.GetComponent<TextMesh>().text = "Player2";
-        //if (pv == "3001") textM.GetComponent<TextMesh>().text = "Player3";
-        //if (pv == "4001") textM.GetComponent<TextMesh>().text = "Player4";
-
         PhotonView PV = /*textM.*/GetComponent<PhotonView>();
         if (PV.ViewID == 1001 || PV.ViewID == 1002) textM.GetComponent<TextMesh>().text = "Player1";
         if (PV.ViewID == 2001) textM.GetComponent<TextMesh>().text = "Player2";
         if (PV.ViewID == 3001) textM.GetComponent<TextMesh>().text = "Player3";
         if (PV.ViewID == 4001) textM.GetComponent<TextMesh>().text = "Player4";
-
 
     }
 
@@ -340,44 +329,6 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     [PunRPC]
     private void PlayerNumber()
     {
-        //if (photonView.IsMine)
-        //{
-            //if (IPswitht == true)
-            //{
-            PhotonView PV = gameObject.GetComponent<PhotonView>();
-            if (PV.ViewID == 1001 || PV.ViewID == 1002)
-            {
-               if (photonView.IsMine)
-               {
-                  Ptext = "Player1";
-                  TM.text = Ptext;
-               }
-            }
-            else if (PV.ViewID == 2001)
-            {
-                if (photonView.IsMine)
-                {
-                  Ptext = "Player2";
-                  TM.text = Ptext;
-                }
-            }
-            else if (PV.ViewID == 3001)
-            {
-                if (photonView.IsMine)
-                {
-                   Ptext = "Player3";
-                   TM.text = Ptext;
-                }
-            }
-            else if (PV.ViewID == 4001)
-            {
-                if (photonView.IsMine)
-                {
-                   Ptext = "Player4";
-                   TM.text = Ptext;
-                }
-            }
-            IPswitht = false;
-        //}
+        
     }
 }
