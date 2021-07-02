@@ -239,12 +239,12 @@ public class multiController : MonoBehaviourPunCallbacks
                 else if (PV.ViewID == 3001)
                 {
                     //go.GetComponent<PlayerController>().Ptext = "Player3";
-                    go.transform.position = new Vector3(4f, 1, -2);
+                    go.transform.position = new Vector3(4f, 1, -5);
                 }
                 else if (PV.ViewID == 4001)
                 {
                     //go.GetComponent<PlayerController>().Ptext = "Player4";
-                    go.transform.position = new Vector3(-4f, 1, -4);
+                    go.transform.position = new Vector3(-4f, 1, -10);
                 }
             }
     }
@@ -281,7 +281,7 @@ public class multiController : MonoBehaviourPunCallbacks
             //Countrooms = 999;
             if (ServerFlg == true)
             {
-                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-42, -21, -10), Quaternion.identity);
+                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-42, -21, -20), Quaternion.identity);
                 //PhotonNetwork.JoinOrCreateRoom();
 
             }

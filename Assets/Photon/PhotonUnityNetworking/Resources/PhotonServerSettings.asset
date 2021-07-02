@@ -36,5 +36,6 @@ MonoBehaviour:
   - RespawnSpaceship
   - TargetHit
   - PlayerON
+  - PlayerNumber
   DisableAutoOpenWizard: 1
   ShowSettings: 1
