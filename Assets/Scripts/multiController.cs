@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 public class multiController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] GameObject ProText,PlayerText;
+    [SerializeField] GameObject ProText;
+    [SerializeField] GameObject PlayerText;
     GameDerector GD;//GameDerectorスクリプト取得用変数
     otamesiRPC orpc;
     public Text tm;
@@ -211,10 +212,10 @@ public class multiController : MonoBehaviourPunCallbacks
         //Countrooms += 1;
         Debug.Log("OnRoomPropertiesUpdate");
 
-        if (photonView.IsMine)
-        {
+        //if (photonView.IsMine)
+        //{
             PlayerText.SetActive(true);
-        }
+        //}
 
         //if (ServerFlg == true)
         //{
@@ -282,10 +283,10 @@ public class multiController : MonoBehaviourPunCallbacks
         {
             //Countrooms = 999;
 
-            if (photonView.IsMine)
-            {
+            //if (photonView.IsMine)
+            //{
                 PlayerText.SetActive(true);
-            }
+            //}
 
             if (ServerFlg == true)
             {

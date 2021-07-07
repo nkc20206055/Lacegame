@@ -13,12 +13,17 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
     string s;
     public int SaveCount;
     public byte saveC;
-    private bool tt;
+    int startP;
+    float startTime,SaveTime;
+    private bool tt,coumtStart,countSwithc;
     // Start is called before the first frame update
     void Start()
     {
         oD = GameObject.Find("MultiObject").GetComponent<multiController>();
         tt = true;
+        coumtStart = false;
+        countSwithc = true;
+        SaveTime = 1;
     }
 
     public override void OnJoinedRoom()
@@ -63,23 +68,63 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
     }
     // Update is called once per frame
     void Update()
-    {
-        //if (oD.ServerFlg == true)
-        //{
+    {     
+        if (tt == true)
+        {
             if (/*oD.ServerFlg == true*/SaveCount != oD.Countrooms && SaveCount <= 4)
             {
                 photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms/*SaveCount*/);
-            SaveCount = oD.Countrooms;
+                SaveCount = oD.Countrooms;
 
             }
-            else if (tt == true && SaveCount >= 4)
+            else if (/*tt == true &&*/ SaveCount >= 4)
             {
                 photonView.RPC("TargetHit", RpcTarget.All, oD.Countrooms/*SaveCount*/);
-            SaveCount = oD.Countrooms;
-            tt = false;
+                SaveCount = oD.Countrooms;
+                coumtStart = true;
+                tt = false;
             }
-            //photonView.RPC("PlayerON", RpcTarget.All,tt);
-        //}
+        }
+
+        if (coumtStart == true)//スタートのカウント
+        {
+            if (startTime < 4) {
+                startTime += 1 * Time.deltaTime;
+                if (startTime < 3&&startTime>=2){
+                    if (countSwithc == true)
+                    {
+                        startP++;
+                        oText.text = startP.ToString();
+                        countSwithc = false;
+                    }
+                } else if (startTime < 2&& startTime >= 1){
+                    if (countSwithc == true)
+                    {
+                        startP++;
+                        oText.text = startP.ToString();
+                        countSwithc = false;
+                    }
+                } else if (startTime < 1&& startTime >= 0){
+                    if (countSwithc == true)
+                    {
+                        startP++;
+                        oText.text = startP.ToString();
+                        countSwithc = false;
+                    }
+                }
+                if (SaveTime<=startTime)
+                {
+                    SaveTime = 1 + SaveTime;
+                    countSwithc = true;
+                }
+            }
+            else if (startTime >= 4)
+            {
+                photonView.RPC("PlayerON", RpcTarget.All);
+                coumtStart = false;
+            }
+            Debug.Log(startTime);
+        }
     }
     //すべての端末で実行される
     [PunRPC]
@@ -91,9 +136,10 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
         //oD.Countrooms = t;
         //SaveCount = oD.Countrooms;
     }
-    //[PunRPC]
-    //public void PlayerON(bool o)
-    //{
-    //    Debug.Log("動いた");
-    //}
+    [PunRPC]
+    public void PlayerON()
+    {
+        Debug.Log("動いた");
+        oText.text = "Start";
+    }
 }
