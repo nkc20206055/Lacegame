@@ -12,14 +12,15 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     public int GateCount, GoalCount;
     public string Ptext;
     public float speed;
-    GameObject textM,Maincamera,PlayerUi;
-    Transform lapText, goalText;//PlayerUIの子オブジェクト取得
-    Text T;
+    GameObject textM,Maincamera,PlayerUi,ProtoUI;
+    Transform lapText, goalText,StartText;//PlayerUIの子オブジェクト取得
+    Text T,startT;
     TextMesh TM;
     Vector3 Plpos,Camerapos,mixpos;
     Rigidbody rigidbody;
     Vector3 GatePos;
-    bool IPswitht;
+    float stratTime,SaveTime;
+    bool IPswitht,StartSwicht,countStart;
     private Vector3 offset;//中心座標
     void PCamera(float x)
     {
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         }
     }
 
-    void IPp()
+    void IPp()//自分が何番目のプレイヤーか
     {
         if (IPswitht == true)
         {
@@ -101,11 +102,14 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         if (photonView.IsMine)
         {
             PlayerUi = GameObject.Find("PlayerText");
+            ProtoUI = GameObject.Find("ProtoText");
             // PlayerUiの子オブジェクトの中からアクティブなオブジェクトを探す
             lapText = PlayerUi.transform.Find("LapText");
+            StartText = ProtoUI.transform.Find("Text");
             //Debug.Log("target2(transform) = " + lapText);
             //Debug.Log("target2(gameObject) = " + lapText.gameObject);
             T = lapText.gameObject.GetComponent<Text>();
+            startT = StartText.gameObject.GetComponent<Text>();
 
             // PlayerUiの子オブジェクトの中から非アクティブなオブジェクトを探す
             goalText = PlayerUi.transform.Find("GoalText");
@@ -126,6 +130,9 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             Vector3 pPos = transform.position;
             GatePos = new Vector3(pPos.x, pPos.y + 1, pPos.z);
             IPswitht = true;
+            countStart = true;
+            StartSwicht = true;
+            stratTime = 0;
         }
 
         //PhotonVoew内のViewIDを取得してPlayerが何番目か調べて番号をつける
@@ -181,7 +188,48 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             //    offset = Maincamera.transform.position - transform.position;
             //}
         }//関係ない
-
+        if (photonView.IsMine)
+        {
+            if (StartSwicht == true) {
+                stratTime += 1 * Time.deltaTime;
+                if (stratTime < 4)
+                {
+                    //stratTime += 1 * Time.deltaTime;
+                    if (countStart == true)
+                    {
+                        if (stratTime < 3 && stratTime >= 2)
+                        {
+                            startT.text = "1";
+                            countStart = false;
+                        }
+                        else if (stratTime < 2 && stratTime >= 1)
+                        {
+                            startT.text = "2";
+                            countStart = false;
+                        }
+                        else if (stratTime < 1 && stratTime >= 0)
+                        {
+                            startT.text = "3";
+                            countStart = false;
+                        }
+                    }
+                    if (SaveTime <= stratTime&&countStart==false)
+                    {
+                        SaveTime = 1 + SaveTime;
+                        countStart = true;
+                    }
+                }else if (stratTime <5&&stratTime >= 4)
+                {
+                    startT.text = "Start";
+                    
+                }else if (stratTime >= 5)
+                {
+                    startT.color = new Color(1f, 0f, 0f, 0f);
+                    Debug.Log("変わった");
+                    StartSwicht = false;
+                }
+            }
+        }
 
         if (photonView.IsMine)
         {
@@ -194,19 +242,22 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
 
         if (photonView.IsMine)//移動
         {
-            float x = Input.GetAxis("Horizontal");
-            float y = Input.GetAxis("Vertical");
-            transform.Rotate(0, x, 0);
+            if (StartSwicht == false)
+            {
+                float x = Input.GetAxis("Horizontal");
+                float y = Input.GetAxis("Vertical");
+                transform.Rotate(0, x, 0);
 
-            if (y != 0 && Speed >= speed)
-            {
-                speed = speed + 0.2f;
+                if (y != 0 && Speed >= speed)
+                {
+                    speed = speed + 0.2f;
+                }
+                else
+                {
+                    speed = speed * 0.98f;
+                }
+                transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * speed);
             }
-            else
-            {
-                speed = speed * 0.98f;
-            }
-            transform.Translate(new Vector3(0, 0, y) * Time.deltaTime * speed);
         }
         else
         {
