@@ -86,45 +86,6 @@ public class otamesiRPC : /*MonoBehaviour*/MonoBehaviourPunCallbacks
             }
         }
 
-        //if (coumtStart == true)//スタートのカウント
-        //{
-        //    if (startTime < 4) {
-        //        startTime += 1 * Time.deltaTime;
-        //        if (startTime < 3&&startTime>=2){
-        //            if (countSwithc == true)
-        //            {
-        //                startP++;
-        //                oText.text = startP.ToString();
-        //                countSwithc = false;
-        //            }
-        //        } else if (startTime < 2&& startTime >= 1){
-        //            if (countSwithc == true)
-        //            {
-        //                startP++;
-        //                oText.text = startP.ToString();
-        //                countSwithc = false;
-        //            }
-        //        } else if (startTime < 1&& startTime >= 0){
-        //            if (countSwithc == true)
-        //            {
-        //                startP++;
-        //                oText.text = startP.ToString();
-        //                countSwithc = false;
-        //            }
-        //        }
-        //        if (SaveTime<=startTime)
-        //        {
-        //            SaveTime = 1 + SaveTime;
-        //            countSwithc = true;
-        //        }
-        //    }
-        //    else if (startTime >= 4)
-        //    {
-        //        photonView.RPC("PlayerON", RpcTarget.All);
-        //        coumtStart = false;
-        //    }
-        //    Debug.Log(startTime);
-        //}
     }
     //すべての端末で実行される
     [PunRPC]

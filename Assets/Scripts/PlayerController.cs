@@ -17,8 +17,10 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     Text T,startT;
     TextMesh TM;
     Vector3 Plpos,Camerapos,mixpos;
-    Rigidbody rigidbody;
+    //Rigidbody rigidbody;
     Vector3 GatePos;
+    RankingContorller RC;
+    int PlayerNmber, Pts;//RankingControllerの二次元配列の列番号指定用
     float stratTime,SaveTime;
     bool IPswitht,StartSwicht,countStart,StartPlayer;
     private Vector3 offset;//中心座標
@@ -87,8 +89,10 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     // Start is called before the first frame update
     void Start()
     {
+        RC = GameObject.Find("PlayerRankingTexts").GetComponent<RankingContorller>();
         if (photonView.IsMine)
         {
+ 
             Vector3 plpos = transform.position;
             Maincamera = GameObject.Find("Main Camera");
             Maincamera.transform.parent = transform;
@@ -139,10 +143,22 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         //PhotonVoew内のViewIDを取得してPlayerが何番目か調べて番号をつける
         textM = transform.GetChild(0).gameObject;//Apple内にある子オブジェクトのtextObを取得する
         PhotonView PV = /*textM.*/GetComponent<PhotonView>();
-        if (PV.ViewID == 1001 || PV.ViewID == 1002) textM.GetComponent<TextMesh>().text = "Player1";
-        if (PV.ViewID == 2001) textM.GetComponent<TextMesh>().text = "Player2";
-        if (PV.ViewID == 3001) textM.GetComponent<TextMesh>().text = "Player3";
-        if (PV.ViewID == 4001) textM.GetComponent<TextMesh>().text = "Player4";
+        if (PV.ViewID == 1001 || PV.ViewID == 1002) {
+            textM.GetComponent<TextMesh>().text = "Player1";
+            PlayerNmber = 0;
+        }
+        if (PV.ViewID == 2001) { 
+            textM.GetComponent<TextMesh>().text = "Player2";
+            PlayerNmber = 1;
+        }
+        if (PV.ViewID == 3001) {
+            textM.GetComponent<TextMesh>().text = "Player3";
+            PlayerNmber = 2;
+        }
+        if (PV.ViewID == 4001) { 
+            textM.GetComponent<TextMesh>().text = "Player4";
+            PlayerNmber = 3;
+        }
 
     }
 
@@ -189,6 +205,8 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             //    offset = Maincamera.transform.position - transform.position;
             //}
         }//関係ない
+        //RC = GameObject.Find("PlayerRankingTexts").GetComponent<RankingContorller>();
+
         if (photonView.IsMine)
         {
             if (StartSwicht == true) {
@@ -329,6 +347,40 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                 }
             }
         }
+        else
+        {
+            if (other.gameObject.tag == "Goal" && GateCount >= 6)
+            {
+                int G;
+                //Debug.Log("ゴール");
+                GoalCount++;
+                if (GoalCount >= 3)
+                {
+                    Debug.Log("ゴール");
+                    goalText.gameObject.SetActive(true);
+                }
+                else
+                {
+                    G = GoalCount + 1;
+                    //T = GameObject.Find("LapText").GetComponent<Text>();
+                    T.text = " Lap " + G + "/3";
+                    GateCount = 0;
+                }
+            }
+            if (other.gameObject.tag == "Gate")
+            {
+                if (GoalCount < 3)
+                {
+                    Vector3 Gpos = other.transform.position;
+                    GatePos = new Vector3(Gpos.x, Gpos.y + 1, Gpos.z);
+                    GateCount++;
+                    Debug.Log("gatepoint " + GateCount);
+                }
+            }
+
+        }
+        //RPC(遠隔手続き呼び出し)
+        photonView.RPC("PlayerNumber", RpcTarget.All, PlayerNmber, GoalCount, GateCount);
     }
 
     // データの送受信
@@ -380,8 +432,20 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
 
     //全ての端末で実行される
     [PunRPC]
-    private void PlayerNumber()
+    private void PlayerNumber(int HaiN,int a,int b)//透明なゲートとゴールを通った回数を渡す
     {
-        
+        for (int i=0;i<2;i++) {
+            switch (i)
+            {
+                case 0:
+                    Pts = a;
+                    break;
+                case 1:
+                    Pts = b;
+                    break;
+            }
+            RC.PlayerGoolCout[HaiN, i] = Pts;
+            RC.RankingSwithc = true;
+        }
     }
 }
