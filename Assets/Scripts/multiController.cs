@@ -9,6 +9,7 @@ public class multiController : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject ProText;
     [SerializeField] GameObject PlayerText;
+    [SerializeField] GameObject RankingTextS;
     GameDerector GD;//GameDerectorスクリプト取得用変数
     otamesiRPC orpc;
     public Text tm;
@@ -17,7 +18,8 @@ public class multiController : MonoBehaviourPunCallbacks
     public byte otame;
     public bool ServerFlg; //サーバーフラグ
     int otamesI;
-    bool MainGameSwithc,SaveSwithc;
+    public bool MainGameSwithc;
+    bool SaveSwithc;
     public void Login(string ip, bool sf)
     {
         //サーバーフラグの設定
@@ -214,7 +216,8 @@ public class multiController : MonoBehaviourPunCallbacks
 
         //if (photonView.IsMine)
         //{
-            PlayerText.SetActive(true);
+        PlayerText.SetActive(true);
+        RankingTextS.SetActive(true);
         //}
 
         //if (ServerFlg == true)
@@ -285,7 +288,8 @@ public class multiController : MonoBehaviourPunCallbacks
 
             //if (photonView.IsMine)
             //{
-                PlayerText.SetActive(true);
+            PlayerText.SetActive(true);
+            RankingTextS.SetActive(true);
             //}
 
             if (ServerFlg == true)

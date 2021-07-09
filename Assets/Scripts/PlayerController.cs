@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     Rigidbody rigidbody;
     Vector3 GatePos;
     float stratTime,SaveTime;
-    bool IPswitht,StartSwicht,countStart;
+    bool IPswitht,StartSwicht,countStart,StartPlayer;
     private Vector3 offset;//中心座標
     void PCamera(float x)
     {
@@ -132,6 +132,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             IPswitht = true;
             countStart = true;
             StartSwicht = true;
+            StartPlayer = false;
             stratTime = 0;
         }
 
@@ -221,8 +222,9 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                 }else if (stratTime <5&&stratTime >= 4)
                 {
                     startT.text = "Start";
-                    
-                }else if (stratTime >= 5)
+                    StartPlayer = true;
+                }
+                else if (stratTime >= 5)
                 {
                     startT.color = new Color(1f, 0f, 0f, 0f);
                     Debug.Log("変わった");
@@ -242,7 +244,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
 
         if (photonView.IsMine)//移動
         {
-            if (StartSwicht == false)
+            if (StartPlayer == true)
             {
                 float x = Input.GetAxis("Horizontal");
                 float y = Input.GetAxis("Vertical");
