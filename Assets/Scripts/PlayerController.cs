@@ -357,7 +357,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                 if (GoalCount >= 3)
                 {
                     Debug.Log("ゴール");
-                    goalText.gameObject.SetActive(true);
+                    //goalText.gameObject.SetActive(true);
                 }
                 else
                 {
@@ -445,7 +445,8 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                     break;
             }
             RC.PlayerGoolCout[HaiN, i] = Pts;
-            RC.RankingSwithc = true;
+            //RC.RankingSwithc = true;
         }
+        RC.RankingSwithc = true;
     }
 }
