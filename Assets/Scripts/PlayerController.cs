@@ -363,7 +363,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                 {
                     G = GoalCount + 1;
                     //T = GameObject.Find("LapText").GetComponent<Text>();
-                    T.text = " Lap " + G + "/3";
+                    //T.text = " Lap " + G + "/3";
                     GateCount = 0;
                 }
             }
@@ -447,6 +447,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             RC.PlayerGoolCout[HaiN, i] = Pts;
             //RC.RankingSwithc = true;
         }
+        RC.Pnuber = HaiN;
         RC.RankingSwithc = true;
     }
 }
