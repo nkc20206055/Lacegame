@@ -10,8 +10,8 @@ public class RankingContorller : MonoBehaviourPunCallbacks
     multiController mC;
     int[] PrankingSave = new int[4];
     Text[] Ptexts = new Text[4];
-    public GameObject[] PtestGS = new GameObject[4];//UIのPlayerTextの保存
-    public Vector3[] TextPosS = new Vector3[4];//UIのPlayerTextの位置を保存
+    public GameObject[] PtestGS = new GameObject[5];//UIのPlayerTextの保存
+    public Vector3[] TextPosS = new Vector3[5];//UIのPlayerTextの位置を保存
     public int[,] PlayerGoolCout = new int[4,3];//二次元配列
     public int Pnuber;//ランキングを入れ替えるときに使用
     public bool RankingSwithc;
@@ -51,9 +51,15 @@ public class RankingContorller : MonoBehaviourPunCallbacks
             //        break;
             //}
 
+
             PtestGS[i] = GameObject.Find(St);
             TextPosS[i] = PtestGS[i].transform.position;
             Ptexts[i] = GameObject.Find(St).GetComponent<Text>();//Stで保存した文字列と同じ名前のTextを持ってくる
+
+            //お試し
+            //PtestGS[oP] = GameObject.Find(St);
+            //TextPosS[oP] = PtestGS[oP].transform.position;
+            //Ptexts[i] = GameObject.Find(St).GetComponent<Text>();//Stで保存した文字列と同じ名前のTextを持ってくる
 
             PlayerGoolCout[i, 2] = oP;
             //Ptexts[i].text = oP.ToString();
@@ -83,8 +89,10 @@ public class RankingContorller : MonoBehaviourPunCallbacks
             {
                 for (int t = 0; t < 4; t++)//二次元配列確認
                 {
-                        //PlayerGoolCout[t, o] = o;
-                    Debug.Log(t + " " + PlayerGoolCout[t, 0]+" "+ PlayerGoolCout[t, 1]+" "+PlayerGoolCout[t,2]+"位");
+                    //PlayerGoolCout[t, o] = o;
+                    Debug.Log(t + " " + PlayerGoolCout[t, 0] + " " + PlayerGoolCout[t, 1] 
+                                + " " + PlayerGoolCout[t, 2] + "位" + "  " + Ptexts[t]);
+                    //Debug.Log(PrankingSave[t]);
                     //PrankingSave[t] =t;
                 }
 
@@ -102,6 +110,8 @@ public class RankingContorller : MonoBehaviourPunCallbacks
                                 s = PrankingSave[i];
                                 PrankingSave[i] = PrankingSave[Pnuber];
                                 PrankingSave[Pnuber] = s;
+                                Ptexts[PlayerGoolCout[Pnuber, 2]].transform.position = TextPosS[PlayerGoolCout[PrankingSave[i], 2]];
+                                Ptexts[PlayerGoolCout[PrankingSave[i], 2]].transform.position = TextPosS[PlayerGoolCout[Pnuber, 2]];
                             }
 
                         }
@@ -114,13 +124,17 @@ public class RankingContorller : MonoBehaviourPunCallbacks
                             s = PrankingSave[i];
                             PrankingSave[i] = PrankingSave[Pnuber];
                             PrankingSave[Pnuber] = s;
+                            Ptexts[PlayerGoolCout[Pnuber, 2]].transform.position = TextPosS[PlayerGoolCout[PrankingSave[i], 2]];
+                            Ptexts[PlayerGoolCout[PrankingSave[i], 2]].transform.position = TextPosS[PlayerGoolCout[Pnuber, 2]];
                         }
                     }
                 }
                 for (int t = 0; t < 4; t++)//二次元配列確認
                 {
                     //PlayerGoolCout[t, o] = o;
-                    Debug.Log(t + " " + PlayerGoolCout[t, 0] + " " + PlayerGoolCout[t, 1] + " " + PlayerGoolCout[t, 2] + "位");
+                    Debug.Log(t + " " + PlayerGoolCout[t, 0] + " " + PlayerGoolCout[t, 1] 
+                                + " " + PlayerGoolCout[t, 2] + "位"+"  "+ Ptexts[t]);
+                    //Debug.Log(PrankingSave[t]);
                     //PrankingSave[t] =t;
                 }
                 RankingSwithc = false;

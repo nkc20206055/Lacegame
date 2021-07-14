@@ -288,6 +288,7 @@ MonoBehaviour:
   Countrooms: 0
   otame: 0
   ServerFlg: 0
+  MainGameSwithc: 0
 --- !u!4 &39205032
 Transform:
   m_ObjectHideFlags: 0
@@ -1976,6 +1977,16 @@ PrefabInstance:
         type: 3}
       propertyPath: viewIdField
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 930572428084493761, guid: 8066e20856944e84bad4e4cb80fb1ca1,
+        type: 3}
+      propertyPath: PtestGS.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 930572428084493761, guid: 8066e20856944e84bad4e4cb80fb1ca1,
+        type: 3}
+      propertyPath: TextPosS.Array.size
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5589944577995806307, guid: 8066e20856944e84bad4e4cb80fb1ca1,
         type: 3}
