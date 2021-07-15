@@ -110,8 +110,8 @@ public class RankingContorller : MonoBehaviourPunCallbacks
                                 s = PrankingSave[i];
                                 PrankingSave[i] = PrankingSave[Pnuber];
                                 PrankingSave[Pnuber] = s;
-                                Ptexts[PlayerGoolCout[Pnuber, 2]].transform.position = TextPosS[PlayerGoolCout[PrankingSave[i], 2]];
-                                Ptexts[PlayerGoolCout[PrankingSave[i], 2]].transform.position = TextPosS[PlayerGoolCout[Pnuber, 2]];
+                                //Ptexts[PlayerGoolCout[Pnuber, 2]].transform.position = TextPosS[PlayerGoolCout[PrankingSave[i], 2]];
+                                //Ptexts[PlayerGoolCout[PrankingSave[i], 2]].transform.position = TextPosS[PlayerGoolCout[Pnuber, 2]];
                             }
 
                         }
@@ -124,82 +124,32 @@ public class RankingContorller : MonoBehaviourPunCallbacks
                             s = PrankingSave[i];
                             PrankingSave[i] = PrankingSave[Pnuber];
                             PrankingSave[Pnuber] = s;
-                            Ptexts[PlayerGoolCout[Pnuber, 2]].transform.position = TextPosS[PlayerGoolCout[PrankingSave[i], 2]];
-                            Ptexts[PlayerGoolCout[PrankingSave[i], 2]].transform.position = TextPosS[PlayerGoolCout[Pnuber, 2]];
+                            //Ptexts[PlayerGoolCout[Pnuber, 2]].transform.position = TextPosS[PlayerGoolCout[PrankingSave[i], 2]];
+                            //Ptexts[PlayerGoolCout[PrankingSave[i], 2]].transform.position = TextPosS[PlayerGoolCout[Pnuber, 2]];
                         }
                     }
                 }
+                //RPC(遠隔手続き呼び出し）
+                photonView.RPC("RnkingT", RpcTarget.All);
+
                 for (int t = 0; t < 4; t++)//二次元配列確認
                 {
-                    //PlayerGoolCout[t, o] = o;
+                    //Ptexts[t].transform.position = TextPosS[PlayerGoolCout[t, 2] - 1];
                     Debug.Log(t + " " + PlayerGoolCout[t, 0] + " " + PlayerGoolCout[t, 1] 
                                 + " " + PlayerGoolCout[t, 2] + "位"+"  "+ Ptexts[t]);
-                    //Debug.Log(PrankingSave[t]);
-                    //PrankingSave[t] =t;
                 }
                 RankingSwithc = false;
             }
         }
 
 
-        //if (Input.GetKeyDown(KeyCode.T))//お試し
-        //{
-        //    //Debug.Log("動いた");
-        //    RankingSwithc = true;
-        //    if (RankingSwithc == true)
-        //    {
-        //        for (int t = 0; t < 4; t++)//二次元配列確認※何列目か
-        //        {
-        //            for (int o = 0; o < 2; o++)//t列目内の0に何回ラップメか、1に何回透明ゲートを通ったかを保存
-        //            {
-        //                //PlayerGoolCout[t, o] = o;
-        //                Thiert = Random.Range(0, 3);
-        //                oTest = Random.Range(1, 7);
-        //                if (o==0) {
-        //                    PlayerGoolCout[t, 0] = Thiert;
-        //                } else if (o==1) {
-        //                    PlayerGoolCout[t, 1] = oTest;
-        //                }
-        //                //Debug.Log(t + " " + PlayerGoolCout[t, o]);
-        //            }
-        //            Debug.Log(t + " " + PlayerGoolCout[t, 0]+" "+ PlayerGoolCout[t, 1]+" "+ PlayerGoolCout[t, 2]);
-        //        }
-
-        //        //順位を入れ替え
-        //        int i = Random.Range(0, 4);
-        //        {
-        //            //for(int h = 3; h >= 0; h--)
-        //            //{
-        //            //    if (i!=h)//違う列なら調べられる
-        //            //    {
-        //            //        for (int r=0;r<2;r++)
-        //            //        {
-        //            //            if (PlayerGoolCout[i,0]> PlayerGoolCout[h, 0]|| PlayerGoolCout[i, 0]==PlayerGoolCout[h, 0])
-        //            //            {
-        //            //                if (PlayerGoolCout[i, 1] > PlayerGoolCout[h, 1])
-        //            //                {
-        //            //                    PtestGS[i].transform.position = TextPosS[h];
-        //            //                    PtestGS[h].transform.position = TextPosS[i];
-        //            //                    //break;
-        //            //                    //Debug.Log(PlayerGoolCout[i, 2] + "と" + PlayerGoolCout[h, 2] + "を入れ替え");
-        //            //                }
-        //            //                //else
-        //            //                //{
-        //            //                //    PtestGS[i].transform.position = TextPosS[h];
-        //            //                //    PtestGS[h].transform.position = TextPosS[i];
-        //            //                //    break;
-        //            //                //}
-
-        //            //            }
-
-        //            //        }
-        //            //    }
-        //            //}
-        //        }
-
-
-        //        RankingSwithc = false;
-        //    }
-        //}
+    }
+    [PunRPC]
+    private void RnkingT()
+    {
+        for (int t = 0; t < 4; t++)//二次元配列確認
+        {
+            Ptexts[t].transform.position = TextPosS[PlayerGoolCout[t, 2] - 1];
+        }
     }
 }

@@ -292,9 +292,11 @@ public class multiController : MonoBehaviourPunCallbacks
             RankingTextS.SetActive(true);
             //}
 
-            if (ServerFlg == true)
+            if (ServerFlg == true)//ステージを生成
             {
-                PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-42, -21, -20), Quaternion.identity);
+                PhotonNetwork.Instantiate("StargGround", new Vector3(-8, 0, 90), Quaternion.identity);
+
+                //PhotonNetwork.Instantiate("prototypeGround 1", new Vector3(-42, -21, -20), Quaternion.identity);
                 //PhotonNetwork.JoinOrCreateRoom();
 
             }
