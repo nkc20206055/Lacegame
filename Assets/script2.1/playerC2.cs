@@ -24,53 +24,53 @@ public class playerC2 :/* MonoBehaviour*/MonoBehaviourPunCallbacks,IPunObservabl
 
     void Start()
     {
-        //if (photonView.IsMine)
-        //{
-        Speed = 1;
-        rb = GetComponent<Rigidbody>();
-        //}
+        if (photonView.IsMine)
+        {
+            Speed = 1;
+            rb = GetComponent<Rigidbody>();
+        }
 
 
     }
 
     void FixedUpdate()
     {
-        //if (photonView.IsMine)※送信受信のため追加
-        //{
-        //速さの計算
-        if (Input.GetButton("Jump"))
+        if (photonView.IsMine)/*※送信受信のため追加*/
+        {
+            //速さの計算
+            if (Input.GetButton("Jump"))
         {
             Speed += AccelPerSecond * Time.deltaTime;
             if (Speed > MaxSpeed) Speed = MaxSpeed;
             //Debug.Log("J");
 
-        }
-        else
-        {
+            }
+            else
+            {
             Speed -= AccelPerSecond * Time.deltaTime / 2;
             if (Speed < 0) Speed = 1;
             //Debug.Log("a");
 
+            }
+
+            rb.velocity = transform.forward * Speed;
+
+
+            //旋回する角度の計算
+            float Handle = Input.GetAxis("Horizontal");
+            transform.Rotate(Vector3.up, TurnPerSecond * Handle * Time.deltaTime);
+
+
+
+             rb.velocity = transform.forward * Speed;
         }
-
-        rb.velocity = transform.forward * Speed;
-
-
-        //旋回する角度の計算
-        float Handle = Input.GetAxis("Horizontal");
-        transform.Rotate(Vector3.up, TurnPerSecond * Handle * Time.deltaTime);
-
-
-
-        rb.velocity = transform.forward * Speed;
-        //}
-        //else
-        //{
-        //    //移動速度を指定する
-        //    GetComponent<Rigidbody>().velocity = velo;
-        //    //回転速度を指定する
-        //    GetComponent<Rigidbody>().angularVelocity = angul;
-        //}
+        else
+        {
+            //移動速度を指定する
+            GetComponent<Rigidbody>().velocity = velo;
+            //回転速度を指定する
+            GetComponent<Rigidbody>().angularVelocity = angul;
+        }
 
     }
 

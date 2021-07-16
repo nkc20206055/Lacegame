@@ -6,7 +6,8 @@ using Photon.Pun;//Photonを使うために書く
 
 public class RankingContorller : MonoBehaviourPunCallbacks
 {
-    GameObject P1T, P2T, P3T, P4T;
+    GameObject P1T, P2T, P3T, P4T,PlayerID;
+    PhotonView PV;
     multiController mC;
     int[] PrankingSave = new int[4];
     Text[] Ptexts = new Text[4];
@@ -27,31 +28,6 @@ public class RankingContorller : MonoBehaviourPunCallbacks
         {
             St = "Player" + oP + "Text";
             St = St.ToString();//一行にまとめる
-            //switch (i)
-            //{
-            //    case 0:
-            //        P1T = GameObject.Find(St);
-            //        TextPosS[0] = P1T.transform.position;
-            //        Ptexts[0]=P1T.GetComponent<Text>();
-            //        break;
-            //    case 1:
-            //        P2T = GameObject.Find(St);
-            //        TextPosS[1] = P2T.transform.position;
-            //        Ptexts[1] = P2T.GetComponent<Text>();
-            //        break;
-            //    case 2:
-            //        P3T = GameObject.Find(St);
-            //        TextPosS[2] = P3T.transform.position;
-            //        Ptexts[2] = P3T.GetComponent<Text>();
-            //        break;
-            //    case 3:
-            //        P4T = GameObject.Find(St);
-            //        TextPosS[3] = P4T.transform.position;
-            //        Ptexts[3] = P4T.GetComponent<Text>();
-            //        break;
-            //}
-
-
             PtestGS[i] = GameObject.Find(St);
             TextPosS[i] = PtestGS[i].transform.position;
             Ptexts[i] = GameObject.Find(St).GetComponent<Text>();//Stで保存した文字列と同じ名前のTextを持ってくる
@@ -83,24 +59,27 @@ public class RankingContorller : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (mC.ServerFlg == true)
+        
+        if (RankingSwithc == true)
         {
-            if (RankingSwithc == true)
-            {
-                for (int t = 0; t < 4; t++)//二次元配列確認
-                {
-                    //PlayerGoolCout[t, o] = o;
-                    Debug.Log(t + " " + PlayerGoolCout[t, 0] + " " + PlayerGoolCout[t, 1] 
-                                + " " + PlayerGoolCout[t, 2] + "位" + "  " + Ptexts[t]);
-                    //Debug.Log(PrankingSave[t]);
-                    //PrankingSave[t] =t;
-                }
 
-                for (int i=3;i>=0;i--)
+            //if (mC.ServerFlg == true)
+            //{
+                //for (int t = 0; t < 4; t++)//二次元配列確認
+                //{
+                //    //PlayerGoolCout[t, o] = o;
+                //    Debug.Log(t + " " + PlayerGoolCout[t, 0] + " " + PlayerGoolCout[t, 1]
+                //                + " " + PlayerGoolCout[t, 2] + "位" + "  " + Ptexts[t]);
+                //    //Debug.Log(PrankingSave[t]);
+                //    //PrankingSave[t] =t;
+                //}
+
+                for (int i = 3; i >= 0; i--)
                 {
-                    if (PrankingSave[i] != Pnuber&& PlayerGoolCout[Pnuber, 2] > PlayerGoolCout[PrankingSave[i], 2])//自分のは処理しない
+                    if (PrankingSave[i] != Pnuber && PlayerGoolCout[Pnuber, 2] > PlayerGoolCout[PrankingSave[i], 2])//自分のは処理しない
                     {
-                        if (PlayerGoolCout[Pnuber, 0] == PlayerGoolCout[PrankingSave[i], 0]) {
+                        if (PlayerGoolCout[Pnuber, 0] == PlayerGoolCout[PrankingSave[i], 0])
+                        {
                             if (PlayerGoolCout[Pnuber, 1] > PlayerGoolCout[PrankingSave[i], 1])
                             {
                                 int s = 0;
@@ -129,6 +108,10 @@ public class RankingContorller : MonoBehaviourPunCallbacks
                         }
                     }
                 }
+            //}
+            
+                
+
                 //RPC(遠隔手続き呼び出し）
                 photonView.RPC("RnkingT", RpcTarget.All);
 
@@ -139,8 +122,8 @@ public class RankingContorller : MonoBehaviourPunCallbacks
                                 + " " + PlayerGoolCout[t, 2] + "位"+"  "+ Ptexts[t]);
                 }
                 RankingSwithc = false;
-            }
         }
+        
 
 
     }
@@ -151,5 +134,9 @@ public class RankingContorller : MonoBehaviourPunCallbacks
         {
             Ptexts[t].transform.position = TextPosS[PlayerGoolCout[t, 2] - 1];
         }
+        //if (photonView.IsMine)
+        //{
+
+        //}
     }
 }
