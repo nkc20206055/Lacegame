@@ -15,12 +15,13 @@ public class RankingContorller : MonoBehaviourPunCallbacks
     public Vector3[] TextPosS = new Vector3[5];//UIのPlayerTextの位置を保存
     public int[,] PlayerGoolCout = new int[4,3];//二次元配列
     public int Pnuber;//ランキングを入れ替えるときに使用
-    public bool RankingSwithc;
+    public bool RankingSwithc,PlayerRT;
     string St,Sg;
     int Thiert,oTest;
     // Start is called before the first frame update
     void Start()
     {
+        PlayerRT = false;
         Pnuber = 0;
         mC = GameObject.Find("MultiObject").GetComponent<multiController>();
         int oP = 1;
@@ -134,9 +135,6 @@ public class RankingContorller : MonoBehaviourPunCallbacks
         {
             Ptexts[t].transform.position = TextPosS[PlayerGoolCout[t, 2] - 1];
         }
-        //if (photonView.IsMine)
-        //{
-
-        //}
+        PlayerRT = true;
     }
 }

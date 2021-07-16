@@ -13,9 +13,40 @@ public class NewPlayerController : /*MonoBehaviour*/MonoBehaviourPunCallbacks, I
     Text T, startT,rankignText;
     RankingContorller RC;
     public int GateCount, GoalCount, SaveID;
-    int PlayerNmber, Pts;
+    int PlayerNmber, Pts,MainRanking;
     float stratTime, SaveTime;
     bool StartSwicht, countStart, StartPlayer;
+    void RnkignTextChenze()
+    {
+        if (photonView.IsMine) {
+            if (RC.PlayerRT == true)
+            {
+                PhotonView PV = /*textM.*/GetComponent<PhotonView>();
+                if (PV.ViewID == 1001 || PV.ViewID == 1002)
+                {
+                    MainRanking = RC.PlayerGoolCout[0, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+                else if (PV.ViewID == 2001)
+                {
+                    MainRanking = RC.PlayerGoolCout[1, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+                else if (PV.ViewID == 3001)
+                {
+                    MainRanking = RC.PlayerGoolCout[2, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+                else if (PV.ViewID == 4001)
+                {
+                    MainRanking = RC.PlayerGoolCout[3, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+
+                RC.PlayerRT = false;
+            }
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -161,10 +192,12 @@ public class NewPlayerController : /*MonoBehaviour*/MonoBehaviourPunCallbacks, I
             if (transform.position.y <= 0f)//落ちた時の処理
             {
                 Debug.Log("落ちた");
-                transform.eulerAngles=Savemuki;//向きをゲートが向いてる方に
+                transform.localEulerAngles=Savemuki;//向きをゲートが向いてる方に※Playerのローカル座標の角度にSavemukiの角度を代入する
                 transform.position = GatePos;//通ったゲート位置に戻る
             }
         }
+
+        RnkignTextChenze();
 
         //他プレイヤーにデータを送信
         //if (photonView.IsMine)
@@ -217,6 +250,7 @@ public class NewPlayerController : /*MonoBehaviour*/MonoBehaviourPunCallbacks, I
                 }
                 else
                 {
+                    Savemuki = other.transform.eulerAngles;
                     G = GoalCount + 1;
                     T = GameObject.Find("LapText").GetComponent<Text>();
                     T.text = " Lap " + G + "/3";
@@ -228,8 +262,8 @@ public class NewPlayerController : /*MonoBehaviour*/MonoBehaviourPunCallbacks, I
                 if (GoalCount < 3)
                 {
                     Vector3 Gpos = other.transform.position;
-                    GatePos = new Vector3(Gpos.x, Gpos.y + 1, Gpos.z);
-                    Savemuki = other.transform.eulerAngles;
+                    GatePos = new Vector3(Gpos.x, Gpos.y-1, Gpos.z);
+                    Savemuki = other.transform.eulerAngles;//※ワールド座標の角度をSavemukiに代入
                     //Debug.Log(other.transform.eulerAngles); ;
                     GateCount++;
                     Debug.Log("gatepoint " + GateCount);
