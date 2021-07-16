@@ -234,9 +234,9 @@ public class multiController : MonoBehaviourPunCallbacks
                 //    case:
                 //}
                 var v = new Vector3(-5f, 1, 0);
-                //GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
-                GameObject go = PhotonNetwork.Instantiate("newPlayer", v, Quaternion.identity);
-                PhotonView PV = go.GetComponent<PhotonView>();
+            GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+            //GameObject go = PhotonNetwork.Instantiate("newPlayer", v, Quaternion.identity);
+            PhotonView PV = go.GetComponent<PhotonView>();
             //サーバーなら赤、クライアントなら青にする
             //if (ServerFlg==false)
             //{
@@ -305,8 +305,8 @@ public class multiController : MonoBehaviourPunCallbacks
             {
                 //ランダムな位置にネットワークオブジェクトを生成する
                 var v = new Vector3(4f, 1, 5);
-                //GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
-                GameObject go = PhotonNetwork.Instantiate("newPlayer", v, Quaternion.identity);
+                GameObject go = PhotonNetwork.Instantiate("Apple", v, Quaternion.identity);
+                //GameObject go = PhotonNetwork.Instantiate("newPlayer", v, Quaternion.identity);
             }
             //if (Countrooms >= Maxroom)
             //{

@@ -14,13 +14,13 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     public float speed;
     GameObject textM,Maincamera,PlayerUi,ProtoUI;
     Transform lapText, goalText,StartText;//PlayerUIの子オブジェクト取得
-    Text T,startT;
+    Text T,startT, rankignText;
     TextMesh TM;
     Vector3 Plpos,Camerapos,mixpos;
     //Rigidbody rigidbody;
-    Vector3 GatePos;
+    Vector3 GatePos, Savemuki;
     RankingContorller RC;
-    int PlayerNmber, Pts;//RankingControllerの二次元配列の列番号指定用
+    int PlayerNmber, Pts, MainRanking;//RankingControllerの二次元配列の列番号指定用
     float stratTime,SaveTime;
     bool IPswitht,StartSwicht,countStart,StartPlayer;
     private Vector3 offset;//中心座標
@@ -86,6 +86,40 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             IPswitht = false;
         }
     }
+
+    void RnkignTextChenze()
+    {
+        if (photonView.IsMine)
+        {
+            if (RC.PlayerRT == true)
+            {
+                PhotonView PV = /*textM.*/GetComponent<PhotonView>();
+                if (PV.ViewID == 1001 || PV.ViewID == 1002)
+                {
+                    MainRanking = RC.PlayerGoolCout[0, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+                else if (PV.ViewID == 2001)
+                {
+                    MainRanking = RC.PlayerGoolCout[1, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+                else if (PV.ViewID == 3001)
+                {
+                    MainRanking = RC.PlayerGoolCout[2, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+                else if (PV.ViewID == 4001)
+                {
+                    MainRanking = RC.PlayerGoolCout[3, 2];
+                    rankignText.text = MainRanking.ToString();
+                }
+
+                RC.PlayerRT = false;
+            }
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -107,6 +141,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         {
             PlayerUi = GameObject.Find("PlayerText");
             ProtoUI = GameObject.Find("ProtoText");
+            rankignText = GameObject.Find("RankText").GetComponent<Text>();
             // PlayerUiの子オブジェクトの中からアクティブなオブジェクトを探す
             lapText = PlayerUi.transform.Find("LapText");
             StartText = ProtoUI.transform.Find("Text");
@@ -146,18 +181,34 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         if (PV.ViewID == 1001 || PV.ViewID == 1002) {
             textM.GetComponent<TextMesh>().text = "Player1";
             PlayerNmber = 0;
+            if (photonView.IsMine)
+            {
+                rankignText.text = "1";
+            }
         }
         if (PV.ViewID == 2001) { 
             textM.GetComponent<TextMesh>().text = "Player2";
             PlayerNmber = 1;
+            if (photonView.IsMine)
+            {
+                rankignText.text = "2";
+            }
         }
         if (PV.ViewID == 3001) {
             textM.GetComponent<TextMesh>().text = "Player3";
             PlayerNmber = 2;
+            if (photonView.IsMine)
+            {
+                rankignText.text = "3";
+            }
         }
         if (PV.ViewID == 4001) { 
             textM.GetComponent<TextMesh>().text = "Player4";
             PlayerNmber = 3;
+            if (photonView.IsMine)
+            {
+                rankignText.text = "4";
+            }
         }
 
     }
@@ -207,6 +258,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
         }//関係ない
         //RC = GameObject.Find("PlayerRankingTexts").GetComponent<RankingContorller>();
 
+        //スタート
         if (photonView.IsMine)
         {
             if (StartSwicht == true) {
@@ -251,16 +303,19 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             }
         }
 
+        //落ちたら
         if (photonView.IsMine)
         {
             if (transform.position.y <= -5)//落ちた時の処理
             {
                 Debug.Log("落ちた");
+                transform.localEulerAngles = Savemuki;//向きをゲートが向いてる方に※Playerのローカル座標の角度にSavemukiの角度を代入する
                 transform.position = GatePos;
             }
         }
 
-        if (photonView.IsMine)//移動
+        //移動
+        if (photonView.IsMine)
         {
             if (StartPlayer == true)
             {
@@ -286,6 +341,8 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             //回転速度を指定する
             GetComponent<Rigidbody>().angularVelocity = angul;
         }
+
+        RnkignTextChenze();
     }
 
     void FixedUpdate()
@@ -330,19 +387,21 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
                     goalText.gameObject.SetActive(true);
                 }
                 else
-                { 
+                {
+                    Savemuki = other.transform.eulerAngles;//※ワールド座標の角度をSavemukiに代入
                     G = GoalCount + 1;
                 //T = GameObject.Find("LapText").GetComponent<Text>();
                 T.text = " Lap " + G + "/3";
                 GateCount = 0;
                 }
             }
-            if (other.gameObject.tag == "Gate")
+            if (other.gameObject.tag == "Gate")//透明ゲートを通ったら
             {
                 if (GoalCount<3) {
                     Vector3 Gpos = other.transform.position;
                    GatePos = new Vector3(Gpos.x,Gpos.y+1,Gpos.z);
-                   GateCount++;
+                    Savemuki = other.transform.eulerAngles;//※ワールド座標の角度をSavemukiに代入
+                    GateCount++;
                    Debug.Log("gatepoint " + GateCount);
                 }
             }
@@ -434,7 +493,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
     [PunRPC]
     private void PlayerNumber(int HaiN,int a,int b)//透明なゲートとゴールを通った回数を渡す
     {
-        for (int i=0;i<2;i++) {
+        for (int i=0;i<2;i++) {//RankingContorllerの二次元配列に透明ゲートとゴールのくぐった回数を記録
             switch (i)
             {
                 case 0:
@@ -448,6 +507,6 @@ public class PlayerController : MonoBehaviourPunCallbacks /*MonoBehaviour*/,IPun
             //RC.RankingSwithc = true;
         }
         RC.Pnuber = HaiN;
-        RC.RankingSwithc = true;
+        RC.RankingSwithc = true;//Rankingを動かす
     }
 }

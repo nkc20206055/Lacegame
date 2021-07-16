@@ -12,6 +12,7 @@ public class NewPlayerController : /*MonoBehaviour*/MonoBehaviourPunCallbacks, I
     Transform lapText, goalText, StartText;//PlayerUIの子オブジェクト取得
     Text T, startT,rankignText;
     RankingContorller RC;
+    playerC2 pC2;//スクリプトplayerC2を取得
     public int GateCount, GoalCount, SaveID;
     int PlayerNmber, Pts,MainRanking;
     float stratTime, SaveTime;
